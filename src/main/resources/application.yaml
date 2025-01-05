@@ -1,0 +1,44 @@
+spring:
+  application:
+    name: "MedicalRecord"
+
+  #Data Source Properties
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/medical_record?createDatabaseIfNotExist=true
+    username: root
+    password: 12345
+  servlet:
+    multipart:
+      max-file-size: 1MB
+      max-request-size: 5MB
+  mvc:
+    hidden method:
+      filter:
+        enabled: true
+
+  #JPA Properties
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+    defer-datasource-initialization: true
+
+  jackson:
+    serialization:
+      INDENT_OUTPUT: true
+
+  # Server configuration
+server:
+  port: 8080
+
+#logging:
+#  level:
+#    org.springframework.security: TRACE
+#    org.springframework.security.web.access: DEBUG
+#    org.springframework.security.web.authentication: DEBUG

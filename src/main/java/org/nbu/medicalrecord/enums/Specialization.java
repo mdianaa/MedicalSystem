@@ -1,0 +1,16 @@
+package org.nbu.medicalrecord.enums;
+
+public enum Specialization {
+    ONCOLOGIST,
+    CARDIOLOGIST,
+    GASTROENTEROLOGIST,
+    GYNAECOLOGIST,
+    ENDOCRINOLOGIST,
+    PATHOLOGIST,
+    DERMATOLOGIST,
+    ALLERGIST,
+    ANESTHESIOLOGIST,
+    NEUROLOGIST,
+    PEDIATRICS,
+    GERIATRICS
+}

@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.nbu.medicalrecord.enums.Specialization;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,9 +20,11 @@ public class Doctor extends BaseEntity {
     @Column(name = "last_name", length = 30, nullable = false)
     private String lastName;
 
-    @Enumerated(EnumType.STRING)
+    @ManyToOne
     private Specialization specialization;
 
-    @Column(nullable = false) // TODO: false by default
+    @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
     private boolean GP;
+
+    //TODO: keep track of the total value of patients that he is GP to - do  not exceed!
 }

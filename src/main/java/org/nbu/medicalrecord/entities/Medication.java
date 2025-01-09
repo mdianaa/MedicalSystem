@@ -5,16 +5,21 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.nbu.medicalrecord.enums.MedicationType;
+import org.nbu.medicalrecord.enums.MedicineType;
+
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Entity
-@Table(name = "medications")
+@Table(name = "medication")
 public class Medication extends BaseEntity {
 
-    @Enumerated(EnumType.STRING)
-    private MedicationType medicationType;
+    @ManyToMany
+    private Set<Medicine> medicines;
+
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String prescription; // time of period to be taken, how often and dosage
 }

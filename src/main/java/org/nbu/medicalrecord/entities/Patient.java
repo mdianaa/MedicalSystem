@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -26,14 +27,12 @@ public class Patient {
     @Column(name = "last_name", length = 30, nullable = false)
     private String lastName;
 
-    @Column
-    private String birthDate;
+    @Column(name = "birth_date", nullable = false)
+    private LocalDate birthDate;
 
-    @OneToMany
+    @OneToMany(mappedBy = "patient",  targetEntity = HealthInsurance.class)
     private Set<HealthInsurance> healthInsurances;
 
     @ManyToOne
     private Doctor GP;
-
-
 }

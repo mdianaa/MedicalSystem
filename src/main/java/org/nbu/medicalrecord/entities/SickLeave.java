@@ -16,9 +16,9 @@ import java.time.LocalDate;
 @Table(name = "sick_leaves")
 public class SickLeave extends BaseEntity {
 
-    @Column
-    private LocalDate from;
+    @Column(nullable = false)
+    private LocalDate fromDate;
 
-    @Column
-    private LocalDate to;
+    @Column(nullable = false)
+    private LocalDate toDate;
 }

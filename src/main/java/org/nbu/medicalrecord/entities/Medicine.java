@@ -5,19 +5,22 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.nbu.medicalrecord.enums.AllergyType;
+import org.nbu.medicalrecord.enums.MedicineType;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Entity
-@Table(name = "allergies")
-public class Allergy extends BaseEntity {
+@Table(name = "medicines")
+public class Medicine extends BaseEntity {
 
     @Column(nullable = false)
-    private String allergen;
+    private String name;
+
+    @Column(name = "milligrams", nullable = false)
+    private int mg;
 
     @Enumerated(EnumType.STRING)
-    private AllergyType allergyType;
+    private MedicineType medicineType;
 }

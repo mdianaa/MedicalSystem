@@ -16,21 +16,15 @@ import java.util.Set;
 @Table(name = "diagnoses")
 public class Diagnosis extends BaseEntity {
 
-    @ManyToOne
-    private Doctor doctor; // name
-
-    @Column(columnDefinition = "TEXT")
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String complaints;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(name = "medical_history", columnDefinition = "TEXT")
     private String medicalHistory;
 
     @ManyToMany
     private Set<Allergy> allergies;
 
     @OneToOne
-    private SickLeave sickLeave;
-
-    @OneToOne
-    private Treatment treatment;
+    private Medication medication;   // no medications might be taken
 }

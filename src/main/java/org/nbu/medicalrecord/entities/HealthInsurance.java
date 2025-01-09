@@ -19,7 +19,7 @@ public class HealthInsurance extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Month month;
 
-    @Column(name = "is_paid", nullable = false)
+    @Column(name = "is_paid", nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
     private boolean isPaid;
 
     @ManyToOne

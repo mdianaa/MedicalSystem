@@ -20,5 +20,6 @@ public class MedicalRecord extends BaseEntity {
     private Patient patient; // name, personal id, date of birth
 
     @OneToMany
-    private Set<Diagnosis> diagnoses;
+    private Set<Visit> visits;
+
 }

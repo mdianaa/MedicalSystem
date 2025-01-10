@@ -4,5 +4,5 @@ import org.nbu.medicalrecord.services.AllergyService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AllergyServiceImpl implements AllergyService {
+public class AllergyServiceImpl {
 }

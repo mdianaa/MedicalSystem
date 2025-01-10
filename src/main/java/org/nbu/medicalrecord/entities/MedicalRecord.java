@@ -16,10 +16,10 @@ import java.util.Set;
 @Table(name = "medical_records")
 public class MedicalRecord extends BaseEntity {
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Patient patient; // name, personal id, date of birth
 
-    @OneToMany
+    @OneToMany(mappedBy = "medicalRecord", targetEntity = Visit.class, cascade = CascadeType.ALL)
     private Set<Visit> visits;
 
 }

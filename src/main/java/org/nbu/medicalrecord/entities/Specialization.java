@@ -3,10 +3,12 @@ package org.nbu.medicalrecord.entities;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,6 +18,8 @@ import lombok.Setter;
 @Table(name = "specializations")
 public class Specialization extends BaseEntity {
 
-    @Column(nullable = false)
+    @Column()
+    @NotBlank
+    @Length(max = 30)
     private String type;
 }

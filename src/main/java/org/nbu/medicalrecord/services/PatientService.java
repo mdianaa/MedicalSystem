@@ -1,7 +1,12 @@
 package org.nbu.medicalrecord.services;
 
 public interface PatientService {
-//    void payHealthInsurance();
-//    void addGP();
-
+    void showAllPatientsWithGP();
+    int totalCountPatientsWithGP();
+    void showAllPatients();
+    void showAllPatientsWhoVisitedDoctor();
+    int totalCountPatientsWhoVisitedDoctor();
+    void showAllPatientsWithResultDiagnosis();
+    int totalCountPatientsWithResultDiagnosis();
+    void showAllPatientsWithAllergy();
 }

@@ -4,5 +4,5 @@ import org.nbu.medicalrecord.services.SickLeaveService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SickLeaveServiceImpl implements SickLeaveService {
+public class SickLeaveServiceImpl {
 }

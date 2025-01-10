@@ -1,6 +1,8 @@
 package org.nbu.medicalrecord.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,9 +18,21 @@ import java.time.LocalDate;
 @Table(name = "sick_leaves")
 public class SickLeave extends BaseEntity {
 
-    @Column(nullable = false)
+    @Column(name = "from_date")
+    @NotNull
     private LocalDate fromDate;
 
-    @Column(nullable = false)
+    @Column(name = "to_date")
+    @NotNull
     private LocalDate toDate;
+
+    @Column()
+    @NotBlank
+    @Lob
+    private String reason;
+
+    @ManyToOne
+    @JoinColumn(name = "patient_id")
+    @NotNull
+    private Patient patient;
 }

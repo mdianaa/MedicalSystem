@@ -1,6 +1,7 @@
 package org.nbu.medicalrecord.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,9 +18,11 @@ import java.time.Month;
 public class HealthInsurance extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
+    @NotNull
     private Month month;
 
-    @Column(name = "is_paid", nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
+    @Column(name = "is_paid", columnDefinition = "BOOLEAN DEFAULT FALSE")
+    @NotNull
     private boolean isPaid;
 
     @ManyToOne

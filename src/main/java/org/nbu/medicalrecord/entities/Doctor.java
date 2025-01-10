@@ -1,10 +1,15 @@
 package org.nbu.medicalrecord.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
+
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,17 +19,27 @@ import lombok.Setter;
 @Table(name = "doctors")
 public class Doctor extends BaseEntity {
 
-    @Column(name = "first_name", length = 30, nullable = false)
+    @Column(name = "first_name")
+    @NotBlank
+    @Length(max = 30)
     private String firstName;
 
-    @Column(name = "last_name", length = 30, nullable = false)
+    @Column(name = "last_name")
+    @NotBlank
+    @Length(max = 30)
     private String lastName;
 
     @ManyToOne
     private Specialization specialization;
 
-    @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
-    private boolean GP;
+    @OneToOne
+    @NotNull
+    private DoctorsSchedule doctorsSchedule;
 
-    //TODO: keep track of the total value of patients that he is GP to - do  not exceed!
+    @Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+    @NotNull
+    private boolean gp;
+
+    @OneToMany(mappedBy = "GP")
+    private Set<Patient> gpPatients;
 }

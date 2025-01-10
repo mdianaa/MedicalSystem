@@ -4,5 +4,5 @@ import org.nbu.medicalrecord.services.DiagnosisService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DiagnosisServiceImpl implements DiagnosisService {
+public class DiagnosisServiceImpl {
 }

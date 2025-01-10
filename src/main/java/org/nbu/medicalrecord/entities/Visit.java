@@ -1,6 +1,7 @@
 package org.nbu.medicalrecord.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,16 +17,24 @@ import java.time.LocalDate;
 @Table(name = "visits")
 public class Visit extends BaseEntity {
 
-    @ManyToOne
-    private Doctor doctor; // name
-
-    @Column(name = "date_of_visit", nullable = false)
-    private LocalDate dateOfVisit;
+    // преглед
 
     @OneToOne
+    @JoinColumn(name = "appointment_id")
+    @NotNull
+    private Appointment appointment;
+
+    @ManyToOne
+    private Doctor doctor;
+
+    @OneToOne(cascade = CascadeType.ALL)
     private Diagnosis diagnosis;
 
-    @ManyToOne(optional = true)
+    @ManyToOne
     private SickLeave sickLeave;  // no sick leave might be taken
 
+    @ManyToOne
+    @JoinColumn(name = "medical_record_id")
+    @NotNull
+    private MedicalRecord medicalRecord;
 }

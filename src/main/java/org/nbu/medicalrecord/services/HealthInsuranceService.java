@@ -1,5 +1,8 @@
 package org.nbu.medicalrecord.services;
 
 public interface HealthInsuranceService {
-//    void referenceForLastSixMonthsForPatient();
+    void createNewHealthInsurance();
+    void payHealthInsuranceForMonth();
+    void payHealthInsuranceForMonths();
+    void referenceForLastSixMonths();
 }

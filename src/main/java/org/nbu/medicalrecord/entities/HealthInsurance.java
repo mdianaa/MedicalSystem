@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.Month;
+import java.time.Year;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,6 +21,10 @@ public class HealthInsurance extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @NotNull
     private Month month;
+
+    @Enumerated(EnumType.STRING)
+    @NotNull
+    private Year year;
 
     @Column(name = "is_paid", columnDefinition = "BOOLEAN DEFAULT FALSE")
     @NotNull

@@ -25,6 +25,6 @@ public class Allergy extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private AllergyType allergyType;
 
-    @ManyToMany(mappedBy = "allergies")
+    @ManyToMany(mappedBy = "allergies", targetEntity = Diagnosis.class)
     private Set<Diagnosis> diagnoses;
 }

@@ -39,6 +39,6 @@ public class Appointment extends BaseEntity {
     private Patient patient; // nullable because not all slots might be booked, if null - appointment hour is available
 
     @ManyToOne
-    private DoctorsSchedule schedule;
+    private Doctor doctor;
 
 }

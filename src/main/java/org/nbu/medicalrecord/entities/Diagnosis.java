@@ -27,7 +27,7 @@ public class Diagnosis extends BaseEntity {
     private String medicalHistory;  // patient's past conditions relevant to the current diagnosis
 
     @ManyToMany(cascade = CascadeType.PERSIST)
-    private Set<Allergy> allergies;
+    private Set<Allergy> allergies;  // patient might not have any allergies
 
     @Column(name = "diagnosis_result")
     @NotBlank

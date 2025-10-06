@@ -21,8 +21,8 @@ import java.time.LocalTime;
 )
 public class Appointment extends BaseEntity {
 
-    // the provided entity is required to be used for the doctors' schedule, not for the patients
-    // the doctors keep track of their available hours
+    // the patient creates an appointment for a particular doctor
+    // the appointment is then related with the particular doctor's schedule
 
     // час при лекар
 

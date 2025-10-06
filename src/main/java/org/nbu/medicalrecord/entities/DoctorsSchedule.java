@@ -26,6 +26,6 @@ public class DoctorsSchedule extends BaseEntity {
     @NotNull
     private ShiftType shift;
 
-    @OneToMany(mappedBy = "schedule", targetEntity = Appointment.class, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany()
     private Set<Appointment> appointments;
 }

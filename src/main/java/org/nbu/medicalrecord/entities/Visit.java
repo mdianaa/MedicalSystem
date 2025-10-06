@@ -24,6 +24,7 @@ public class Visit extends BaseEntity {
     @NotNull
     private Appointment appointment;
 
+    // is it needed here?
     @ManyToOne
     private Doctor doctor;
 

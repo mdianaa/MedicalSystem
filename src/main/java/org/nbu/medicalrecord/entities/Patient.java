@@ -43,7 +43,7 @@ public class Patient {
     @NotNull
     private LocalDate birthDate;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     private User user;
 
     @OneToMany(mappedBy = "patient", targetEntity = HealthInsurance.class)

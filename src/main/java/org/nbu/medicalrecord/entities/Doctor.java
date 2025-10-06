@@ -37,7 +37,7 @@ public class Doctor extends BaseEntity {
     @Pattern(regexp = "\\d{10}", message = "Personal ID must contain only digits.")
     private String egn;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     private User user;
 
     @ManyToOne

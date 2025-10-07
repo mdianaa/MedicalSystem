@@ -13,9 +13,11 @@ import org.nbu.medicalrecord.enums.AllergyType;
 @Setter
 public class AllergyDtoResponse {
 
-    @NotBlank
+    private long id;
+
     private String allergen;
 
-    @NotBlank
     private AllergyType allergyType;
+
+    private long diagnosesCount;
 }

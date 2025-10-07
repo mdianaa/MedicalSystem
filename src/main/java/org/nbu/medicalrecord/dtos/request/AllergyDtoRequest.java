@@ -1,6 +1,7 @@
 package org.nbu.medicalrecord.dtos.request;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,6 @@ public class AllergyDtoRequest {
     @NotBlank
     private String allergen;
 
-    @NotBlank
+    @NotNull
     private AllergyType allergyType;
 }

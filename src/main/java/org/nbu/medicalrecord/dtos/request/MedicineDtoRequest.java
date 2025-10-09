@@ -21,7 +21,6 @@ public class MedicineDtoRequest {
     @Length(max = 30)
     private String name;
 
-    @NotNull
     @Positive
     @Min(1)
     private int mg;

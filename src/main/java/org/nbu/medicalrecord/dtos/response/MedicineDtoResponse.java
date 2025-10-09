@@ -11,6 +11,8 @@ import lombok.Setter;
 @Setter
 public class MedicineDtoResponse {
 
+    private long id;
+
     private String name;
 
     private int mg;

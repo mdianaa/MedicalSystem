@@ -13,7 +13,5 @@ public interface MedicineService {
 
     Set<MedicineDtoResponse> showAllMedicines();
 
-//    void editMedicine();
-
     void deleteMedicine(long medicineId);
 }

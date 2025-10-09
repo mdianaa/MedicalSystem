@@ -17,7 +17,7 @@ import java.time.LocalTime;
 @Entity
 @Table(
         name = "appointments",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"date", "hour_of_visit", "doctors_schedule_id"})
+        uniqueConstraints = @UniqueConstraint(columnNames = {"date", "hour_of_visit", "doctor_id"})
 )
 public class Appointment extends BaseEntity {
 
@@ -34,11 +34,10 @@ public class Appointment extends BaseEntity {
     @NotNull
     private LocalTime hourOfAppointment;
 
-    @ManyToOne
-    @JoinColumn(name = "patient_id")
-    private Patient patient; // nullable because not all slots might be booked, if null - appointment hour is available
+    @ManyToOne @JoinColumn(name = "patient_id")
+    private Patient patient;               // null => slot available (if you pre-create slots)
 
-    @ManyToOne
+    @ManyToOne @JoinColumn(name = "doctor_id", nullable = false)
     private Doctor doctor;
 
 }

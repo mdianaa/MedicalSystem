@@ -11,15 +11,15 @@ public interface AppointmentService {
 
     PatientAppointmentDtoResponse makeAppointment(AppointmentDtoRequest appointmentDtoRequest);
 
-    // DoctorAppointmentDtoResponse changeAppointmentsDate(); // doctor's view
+    // patient’s view
+    Set<PatientAppointmentDtoResponse> showAllAvailableAppointmentsByDoctorId(Long doctorId);
 
-    Set<PatientAppointmentDtoResponse> showAllAvailableAppointmentsByDoctor(int doctorEgn); // patient's view
+    Set<PatientAppointmentDtoResponse> showAllPatientAppointmentsById(Long patientId);
 
-    Set<PatientAppointmentDtoResponse> showAllPatientAppointments(int patientEgn);  //  patient's view
+    PatientAppointmentDtoResponse showPatientAppointmentOnDateById(Long patientId, LocalDate date);
 
-    PatientAppointmentDtoResponse showPatientAppointmentOnDate(int patientEgn, LocalDate date);  //  patient's view
-
-    Set<DoctorAppointmentDtoResponse> showAllOccupiedAppointments(int doctorEgn);  // doctor's view
+    // doctor’s view
+    Set<DoctorAppointmentDtoResponse> showAllOccupiedAppointmentsById(Long doctorId);
 
     void cancelAppointment(long appointmentId);
 }

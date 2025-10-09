@@ -28,7 +28,7 @@ public class AllergyServiceImpl implements AllergyService {
         Allergy a = new Allergy();
         a.setAllergen(name);
         a.setAllergyType(req.getAllergyType());
-        a.setDiagnoses(null); // leave null or empty; JPA will manage the owning side on Diagnosis
+        a.setDiagnoses(null);
 
         allergyRepository.save(a);
         return toDto(a, 0);
@@ -36,7 +36,7 @@ public class AllergyServiceImpl implements AllergyService {
 
     @Override
     public AllergyDtoResponse showAllergy(String allergen) {
-        var a = allergyRepository.findWithDiagnosesByAllergenIgnoreCase(normalize(allergen))
+         Allergy a = allergyRepository.findWithDiagnosesByAllergenIgnoreCase(normalize(allergen))
                 .orElseThrow(() -> new IllegalArgumentException("Allergy not found: " + allergen));
         long count = (a.getDiagnoses() == null) ? 0 : a.getDiagnoses().size();
         return toDto(a, count);
@@ -45,10 +45,9 @@ public class AllergyServiceImpl implements AllergyService {
     @Override
     @Transactional
     public void deleteAllergy(String allergen) {
-        var a = allergyRepository.findWithDiagnosesByAllergenIgnoreCase(normalize(allergen))
+        Allergy a = allergyRepository.findWithDiagnosesByAllergenIgnoreCase(normalize(allergen))
                 .orElseThrow(() -> new IllegalArgumentException("Allergy not found: " + allergen));
 
-        // Safety: prevent deleting vocab terms still referenced by diagnoses
         if (a.getDiagnoses() != null && !a.getDiagnoses().isEmpty()) {
             throw new IllegalStateException("Cannot delete allergy; it is referenced by diagnoses.");
         }

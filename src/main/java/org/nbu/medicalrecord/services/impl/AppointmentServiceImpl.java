@@ -108,7 +108,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     private PatientAppointmentDtoResponse toPatientDto(Appointment a) {
-        var d = a.getDoctor();
+        Doctor d = a.getDoctor();
         String doctorName = d == null ? null : d.getUser().getFirstName() + " " + d.getUser().getLastName();
         return new PatientAppointmentDtoResponse(
                 a.getId(),
@@ -121,7 +121,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     private DoctorAppointmentDtoResponse toDoctorDto(Appointment a) {
-        var p = a.getPatient();
+        Patient p = a.getPatient();
         String patientName = p == null ? null : p.getUser().getFirstName() + " " + p.getUser().getLastName();
         return new DoctorAppointmentDtoResponse(
                 a.getId(),

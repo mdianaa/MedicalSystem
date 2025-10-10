@@ -11,5 +11,7 @@ import lombok.Setter;
 @Setter
 public class SpecializationDtoResponse {
 
-    private String type;
+    private long id;
+
+    private String name;
 }

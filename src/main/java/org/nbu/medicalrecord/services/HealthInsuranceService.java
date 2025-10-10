@@ -9,11 +9,11 @@ import java.util.Set;
 
 public interface HealthInsuranceService {
 
-    HealthInsuranceDtoResponse createNewHealthInsurance(HealthInsuranceDtoRequest healthInsuranceDtoRequest);
+    HealthInsuranceDtoResponse createNewHealthInsurance(HealthInsuranceDtoRequest request);
 
-    void payHealthInsuranceForMonthInYear(long patientId, Month month, Year year);
+    void payHealthInsuranceForMonthInYear(long patientId, Month month, int year);
 
-    void payHealthInsuranceForMonthsInYear(long patientId, Set<Month> months, Year year);
+    void payHealthInsuranceForMonthsInYear(long patientId, Set<Month> months, int year);
 
-    Set<HealthInsuranceDtoResponse> referenceForLastSixMonths();
+    Set<HealthInsuranceDtoResponse> referenceForLastSixMonthsByPatientId(Long patientId);
 }

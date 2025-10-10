@@ -7,11 +7,11 @@ import java.util.Set;
 
 public interface MedicalRecordService {
 
-    MedicalRecordDtoResponse createNewMedicalRecord(MedicalRecordDtoRequest medicalRecordDtoRequest);
+    MedicalRecordDtoResponse createNewMedicalRecord(MedicalRecordDtoRequest req);
 
     MedicalRecordDtoResponse showMedicalRecord(long patientId);
 
     Set<MedicalRecordDtoResponse> showAllMedicalRecords();
 
-    void deleteMedicalRecord();
+    void deleteMedicalRecord(long medicalRecordId);
 }

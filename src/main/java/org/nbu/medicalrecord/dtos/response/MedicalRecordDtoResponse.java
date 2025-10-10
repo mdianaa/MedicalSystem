@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -16,16 +17,16 @@ import java.util.Set;
 @Setter
 public class MedicalRecordDtoResponse {
 
-    @NotBlank
-    private String patientFirstName;
+    private long id;
 
-    @NotBlank
-    private String patientLastName;
+    private long patientId;
 
-    @NotBlank
-    @Size(min = 10, max = 10, message = "Personal ID must be exactly 10 digits.")
-    @Pattern(regexp = "\\d{10}", message = "Personal ID must contain only digits.")
-    private String patientEgn;
+    private String firstName;
 
-    private Set<VisitDtoResponse> visits;
+    private String lastName;
+
+    private LocalDate birthDate;
+
+    private int visitsCount;
+
 }

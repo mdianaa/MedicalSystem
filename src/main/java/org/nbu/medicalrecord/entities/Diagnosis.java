@@ -40,4 +40,10 @@ public class Diagnosis extends BaseEntity {
     @Column(name = "required_tests")
     @Lob
     private String requiredTests;   // lab tests if needed
+
+    @ManyToOne()
+    private Doctor doctor;
+
+    @ManyToOne
+    private Patient patient;
 }

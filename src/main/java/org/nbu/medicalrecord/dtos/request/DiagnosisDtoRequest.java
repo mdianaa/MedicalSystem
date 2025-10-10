@@ -1,6 +1,7 @@
 package org.nbu.medicalrecord.dtos.request;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,20 +15,22 @@ import java.util.Set;
 @Setter
 public class DiagnosisDtoRequest {
 
+    @NotNull
+    private long doctorId;
+
+    @NotNull
+    private long patientId;
+
     @NotBlank
     private String complaints;
 
-    @NotBlank
     private String medicalHistory;
-
-    //TODO: how to add allergies to the diagnosis
-    private Set<AllergyDtoRequest> allergyDtoRequests;
 
     @NotBlank
     private String diagnosisResult;
 
-    //TODO: how to add medication to the diagnosis
-    private Set<MedicationDtoRequest> medicationDtoRequests;
+    private MedicationDtoRequest medication; // nullable if no meds
 
     private String requiredTests;
+
 }

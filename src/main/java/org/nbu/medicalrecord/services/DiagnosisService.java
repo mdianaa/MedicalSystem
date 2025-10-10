@@ -7,15 +7,13 @@ import java.util.Set;
 
 public interface DiagnosisService {
 
-    DiagnosisDtoResponse createDiagnosis(DiagnosisDtoRequest diagnosisDtoRequest);
+    DiagnosisDtoResponse createDiagnosis(DiagnosisDtoRequest request);
 
-    Set<DiagnosisDtoResponse> showAllDiagnosisForPatient(int patientEgn);
+    Set<DiagnosisDtoResponse> showAllDiagnosisForPatientId(Long patientId);
 
-    Set<DiagnosisDtoResponse> showAllDiagnosisByDoctor(int doctorEgn);
+    Set<DiagnosisDtoResponse> showAllDiagnosisByDoctorId(Long doctorId);
 
     Set<DiagnosisDtoResponse> showMostFrequentDiagnosisResult();
 
-//    void editDiagnosis();
-
-    void deleteDiagnosis();
+    void deleteDiagnosis(Long diagnosisId);
 }

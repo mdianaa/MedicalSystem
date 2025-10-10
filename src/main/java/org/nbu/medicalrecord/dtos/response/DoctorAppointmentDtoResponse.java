@@ -8,26 +8,23 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 public class DoctorAppointmentDtoResponse {
 
-    @NotBlank
-    private String date;
+    private long id;
 
-    @NotBlank
-    private String hourOfAppointment;
+    private long patientId;
 
-    @NotBlank
-    @Size(min = 10, max = 10, message = "Personal ID must be exactly 10 digits.")
-    @Pattern(regexp = "\\d{10}", message = "Personal ID must contain only digits.")
-    private int patientEgn;
+    private String patientName;
 
-    @NotBlank
-    private String patientFirstName;
+    private LocalDate date;
 
-    @NotBlank
-    private String patientLastName;
+    private LocalTime hourOfAppointment;
+
 }

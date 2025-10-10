@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -14,20 +16,24 @@ import java.util.Set;
 @Setter
 public class DiagnosisDtoResponse {
 
-    @NotBlank
+    private long id;
+
+    private String doctorName;
+
+    private String patientName;
+
     private String complaints;
 
-    @NotBlank
     private String medicalHistory;
 
-    //TODO: how to add allergies to the diagnosis
-    private Set<AllergyDtoResponse> allergyDtoRequests;
+    private List<String> allergies;
 
-    @NotBlank
     private String diagnosisResult;
 
-    //TODO: how to add medication to the diagnosis
-    private Set<MedicationDtoResponse> medicationDtoRequests;
+    private MedicationDtoResponse medication;
 
     private String requiredTests;
+
+    private LocalDateTime createdAt;
+
 }

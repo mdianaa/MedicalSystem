@@ -21,30 +21,15 @@ import java.util.Set;
 @Table(name = "doctors")
 public class Doctor extends BaseEntity {
 
-    @Column(name = "first_name")
-    @NotBlank
-    @Length(max = 30)
-    private String firstName;
-
-    @Column(name = "last_name")
-    @NotBlank
-    @Length(max = 30)
-    private String lastName;
-
-    @Column(name = "egn", unique = true, length = 10)
-    @NotBlank
-    @Size(min = 10, max = 10, message = "Personal ID must be exactly 10 digits.")
-    @Pattern(regexp = "\\d{10}", message = "Personal ID must contain only digits.")
-    private String egn;
-
     @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", unique = true)
     private User user;
 
     @ManyToOne
     private Specialization specialization;
 
-    @OneToOne
-    @NotNull
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "schedule_id", unique = true, nullable = false)
     private DoctorsSchedule doctorsSchedule;
 
     @Column(columnDefinition = "BOOLEAN DEFAULT FALSE")

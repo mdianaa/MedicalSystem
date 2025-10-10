@@ -7,9 +7,9 @@ import java.util.Set;
 
 public interface DoctorService {
 
-    PatientDataDtoResponse addNewPatientForGp(long patientEgn, long doctorEgn);
+    PatientDataDtoResponse addNewPatientForGpById(Long patientId, Long doctorId);
 
-    int countTotalPatientsForGp(long doctorEgn);
+    int countTotalPatientsForGpById(Long doctorId);
 
     Set<DoctorDataDtoResponse> showAllGPs();
 

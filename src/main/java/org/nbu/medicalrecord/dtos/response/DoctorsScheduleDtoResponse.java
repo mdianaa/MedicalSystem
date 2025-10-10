@@ -1,12 +1,10 @@
 package org.nbu.medicalrecord.dtos.response;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.Set;
+import org.nbu.medicalrecord.enums.ShiftType;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,14 +12,11 @@ import java.util.Set;
 @Setter
 public class DoctorsScheduleDtoResponse {
 
-    @NotBlank
-    private String doctorFirstName;
+    private long scheduleId;
 
-    @NotBlank
-    private String doctorLastName;
+    private long doctorId;
 
-    @NotBlank
-    private String shiftType;
+    private ShiftType shift;
 
-    private Set<DoctorAppointmentDtoResponse> appointmentDtoResponses;
+    int appointmentsCount;
 }

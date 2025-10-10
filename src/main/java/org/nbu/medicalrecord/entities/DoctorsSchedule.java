@@ -18,8 +18,8 @@ import java.util.Set;
 @Table(name = "doctors_schedule")
 public class DoctorsSchedule extends BaseEntity {
 
-    @OneToOne(mappedBy = "doctorsSchedule", targetEntity = Doctor.class)
-    @NotNull
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "doctor_id", unique = true, nullable = false)
     private Doctor doctor;
 
     @Enumerated(EnumType.STRING)

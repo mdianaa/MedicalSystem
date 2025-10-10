@@ -2,11 +2,14 @@ package org.nbu.medicalrecord.dtos.request;
 
 import jakarta.persistence.Lob;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -15,9 +18,9 @@ import java.util.Set;
 @Setter
 public class MedicationDtoRequest {
 
-    private Set<MedicineDtoRequest> medicines; //TODO: how to reach the medicines
+    @NotEmpty
+    List<@NotNull Long> medicineIds;
 
     @NotBlank
-    @Lob
     private String prescription;
 }

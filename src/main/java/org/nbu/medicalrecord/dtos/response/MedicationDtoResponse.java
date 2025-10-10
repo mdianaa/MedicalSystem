@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Set;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,7 +13,9 @@ import java.util.Set;
 @Setter
 public class MedicationDtoResponse {
 
+    private long id;
+
     private String prescription;
 
-    private Set<MedicineDtoResponse> medicineDtoResponses;
+    private List<MedicineDtoResponse> medicines;
 }

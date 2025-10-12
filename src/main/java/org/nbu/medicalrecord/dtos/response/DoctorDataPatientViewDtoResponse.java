@@ -11,11 +11,13 @@ import lombok.Setter;
 @Setter
 public class DoctorDataPatientViewDtoResponse {
 
+    private long id;
+
     private String firstName;
 
     private String lastName;
 
     private String specializationType;
 
-    private String gp;
+    private boolean isGp;
 }

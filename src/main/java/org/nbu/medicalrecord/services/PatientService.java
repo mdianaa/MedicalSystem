@@ -1,24 +1,24 @@
 package org.nbu.medicalrecord.services;
 
-import org.nbu.medicalrecord.dtos.response.PatientDataDtoResponse;
+import org.nbu.medicalrecord.dtos.response.PatientDataWithDoctorDtoResponse;
 
 import java.util.Set;
 
 public interface PatientService {
 
-    Set<PatientDataDtoResponse> showAllPatientsWithGP(long doctorId);
+    Set<PatientDataWithDoctorDtoResponse> showAllPatientsWithGP(long doctorId);
 
     int totalCountPatientsWithGP(long doctorId);
 
-    Set<PatientDataDtoResponse> showAllPatients();
+    Set<PatientDataWithDoctorDtoResponse> showAllPatients();
 
-    Set<PatientDataDtoResponse> showAllPatientsWhoVisitedDoctor(long doctorId);
+    Set<PatientDataWithDoctorDtoResponse> showAllPatientsWhoVisitedDoctor(long doctorId);
 
     int totalCountPatientsWhoVisitedDoctor(long doctorId);
 
-    Set<PatientDataDtoResponse> showAllPatientsWithResultDiagnosis(String result);
+    Set<PatientDataWithDoctorDtoResponse> showAllPatientsWithResultDiagnosis(String result);
 
     int totalCountPatientsWithResultDiagnosis(String result);
 
-    Set<PatientDataDtoResponse> showAllPatientsWithAllergy(String allergen);
+    Set<PatientDataWithDoctorDtoResponse> showAllPatientsWithAllergy(String allergen);
 }

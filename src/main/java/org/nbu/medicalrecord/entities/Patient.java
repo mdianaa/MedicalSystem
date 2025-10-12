@@ -9,7 +9,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -20,30 +19,20 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "patients")
-public class Patient {
+public class Patient extends BaseEntity{
 
-    @Id
     @Column(name = "egn", unique = true, length = 10)
     @NotBlank
     @Size(min = 10, max = 10, message = "Personal ID must be exactly 10 digits.")
     @Pattern(regexp = "\\d{10}", message = "Personal ID must contain only digits.")
     private String egn;
 
-    @Column(name = "first_name")
-    @NotBlank
-    @Length(max = 30)
-    private String firstName;
-
-    @Column(name = "last_name")
-    @NotBlank
-    @Length(max = 30)
-    private String lastName;
-
     @Column(name = "birth_date")
     @NotNull
     private LocalDate birthDate;
 
     @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", unique = true)
     private User user;
 
     @OneToMany(mappedBy = "patient", targetEntity = HealthInsurance.class)
@@ -54,5 +43,6 @@ public class Patient {
 
     @ManyToOne
     @NotNull
-    private Doctor GP;
+    @JoinColumn(name = "gp_doctor_id")
+    private Doctor gp;
 }

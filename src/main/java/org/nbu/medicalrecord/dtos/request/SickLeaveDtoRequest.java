@@ -19,18 +19,18 @@ import java.time.LocalDate;
 public class SickLeaveDtoRequest {
 
     @NotNull
+    private long doctorId;
+
+    @NotNull
+    private long patientId;
+
+    @NotNull
     private LocalDate fromDate;
 
     @NotNull
     private LocalDate toDate;
 
     @NotBlank
-    @Lob
     private String reason;
-
-    @NotBlank
-    @Size(min = 10, max = 10, message = "Personal ID must be exactly 10 digits.")
-    @Pattern(regexp = "\\d{10}", message = "Personal ID must contain only digits.")
-    private int patientEgn;
 
 }

@@ -18,7 +18,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class HealthInsuranceController {
 
-    private final HealthInsuranceService service;
+    private final HealthInsuranceService healthInsuranceService;
 
     @PostMapping
     @PreAuthorize("@authz.isPatient(authentication, #patientId) or hasAuthority('ADMIN')")
@@ -26,8 +26,8 @@ public class HealthInsuranceController {
             @PathVariable Long patientId,
             @Valid @RequestBody HealthInsuranceDtoRequest req
     ) {
-        var fixed = new HealthInsuranceDtoRequest(patientId, req.getMonth(), req.getYear(), req.isPaid());
-        var res = service.createNewHealthInsurance(fixed);
+        HealthInsuranceDtoRequest fixed = new HealthInsuranceDtoRequest(patientId, req.getMonth(), req.getYear(), req.isPaid());
+        HealthInsuranceDtoResponse res = healthInsuranceService.createNewHealthInsurance(fixed);
         return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }
 
@@ -38,7 +38,7 @@ public class HealthInsuranceController {
             @RequestParam Month month,
             @RequestParam int year
     ) {
-        service.payHealthInsuranceForMonthInYear(patientId, month, year);
+        healthInsuranceService.payHealthInsuranceForMonthInYear(patientId, month, year);
         return ResponseEntity.noContent().build();
     }
 
@@ -49,14 +49,14 @@ public class HealthInsuranceController {
             @RequestParam Set<Month> months,
             @RequestParam int year
     ) {
-        service.payHealthInsuranceForMonthsInYear(patientId, months, year);
+        healthInsuranceService.payHealthInsuranceForMonthsInYear(patientId, months, year);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/last-six")
     @PreAuthorize("@authz.isPatient(authentication, #patientId) or hasAuthority('ADMIN')")
     public Set<HealthInsuranceDtoResponse> lastSix(@PathVariable Long patientId) {
-        return service.referenceForLastSixMonthsByPatientId(patientId);
+        return healthInsuranceService.referenceForLastSixMonthsByPatientId(patientId);
     }
 }
 

@@ -21,7 +21,7 @@ public class AllergyController {
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<AllergyDtoResponse> add(@Valid @RequestBody AllergyDtoRequest req) {
-        var res = allergyService.addAllergy(req);
+        AllergyDtoResponse res = allergyService.addAllergy(req);
         return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }
 

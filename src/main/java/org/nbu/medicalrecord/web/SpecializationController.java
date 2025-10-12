@@ -17,25 +17,25 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class SpecializationController {
 
-    private final SpecializationService service;
+    private final SpecializationService specializationService;
 
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<SpecializationDtoResponse> add(@Valid @RequestBody SpecializationDtoRequest req) {
-        var res = service.addNewSpecialization(req);
+        SpecializationDtoResponse res = specializationService.addNewSpecialization(req);
         return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }
 
     @GetMapping
     @PreAuthorize("hasAnyAuthority('ADMIN','DOCTOR','PATIENT')")
     public Set<SpecializationDtoResponse> list() {
-        return service.showAllSpecializations();
+        return specializationService.showAllSpecializations();
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable long id) {
-        service.deleteSpecialization(id);
+        specializationService.deleteSpecialization(id);
         return ResponseEntity.noContent().build();
     }
 }

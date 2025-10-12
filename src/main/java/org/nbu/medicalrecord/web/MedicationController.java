@@ -19,11 +19,10 @@ public class MedicationController {
 
     private final MedicationService medicationService;
 
-    // Typically created via Diagnosis, but keeping this for completeness/tools
     @PostMapping
     @PreAuthorize("hasAnyAuthority('DOCTOR','ADMIN')")
     public ResponseEntity<MedicationDtoResponse> add(@Valid @RequestBody MedicationDtoRequest req) {
-        var res = medicationService.addMedication(req);
+        MedicationDtoResponse res = medicationService.addMedication(req);
         return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }
 

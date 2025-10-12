@@ -23,7 +23,7 @@ public class DiagnosisController {
     @PostMapping
     @PreAuthorize("@authz.isDoctor(authentication, #req.doctorId()) or hasAuthority('ADMIN')")
     public ResponseEntity<DiagnosisDtoResponse> create(@Valid @RequestBody DiagnosisDtoRequest req) {
-        var res = diagnosisService.createDiagnosis(req);
+        DiagnosisDtoResponse res = diagnosisService.createDiagnosis(req);
         return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }
 

@@ -20,9 +20,9 @@ public class MedicineController {
     private final MedicineService medicineService;
 
     @PostMapping
-    @PreAuthorize("hasAuthority('ADMIN')") // or hasAnyAuthority('DOCTOR','ADMIN') if doctors can add to catalog
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<MedicineDtoResponse> add(@Valid @RequestBody MedicineDtoRequest req) {
-        var res = medicineService.addMedicine(req);
+        MedicineDtoResponse res = medicineService.addMedicine(req);
         return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }
 

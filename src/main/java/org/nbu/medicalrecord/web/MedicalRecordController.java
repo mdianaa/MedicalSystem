@@ -17,12 +17,12 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class MedicalRecordController {
 
-    private final MedicalRecordService service;
+    private final MedicalRecordService medicalRecordService;
 
     @PostMapping
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DOCTOR')") // tighten with GP rule if needed
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DOCTOR')")
     public ResponseEntity<MedicalRecordDtoResponse> create(@Valid @RequestBody MedicalRecordDtoRequest req) {
-        var res = service.createNewMedicalRecord(req);
+        MedicalRecordDtoResponse res = medicalRecordService.createNewMedicalRecord(req);
         return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }
 
@@ -31,19 +31,19 @@ public class MedicalRecordController {
             + "or @authz.isDoctorOfPatient(authentication, #patientId) "
             + "or hasAuthority('ADMIN')")
     public MedicalRecordDtoResponse byPatient(@PathVariable long patientId) {
-        return service.showMedicalRecord(patientId);
+        return medicalRecordService.showMedicalRecord(patientId);
     }
 
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     public Set<MedicalRecordDtoResponse> listAll() {
-        return service.showAllMedicalRecords();
+        return medicalRecordService.showAllMedicalRecords();
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable long id) {
-        service.deleteMedicalRecord(id);
+        medicalRecordService.deleteMedicalRecord(id);
         return ResponseEntity.noContent().build();
     }
 }

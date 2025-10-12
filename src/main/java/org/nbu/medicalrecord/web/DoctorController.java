@@ -23,7 +23,7 @@ public class DoctorController {
     @PostMapping("/{doctorId}/gp/patients/{patientId}")
     @PreAuthorize("@authz.isDoctor(authentication, #doctorId) or hasAuthority('ADMIN')")
     public ResponseEntity<PatientDataDtoResponse> addPatientForGp(@PathVariable Long doctorId, @PathVariable Long patientId) {
-        var res = doctorService.addNewPatientForGpById(patientId, doctorId);
+        PatientDataDtoResponse res = doctorService.addNewPatientForGpById(patientId, doctorId);
         return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }
 

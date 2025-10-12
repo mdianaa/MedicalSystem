@@ -26,7 +26,7 @@ public class AppointmentController {
     @PostMapping
     @PreAuthorize("@authz.isPatient(authentication, #req.patientId()) or hasAuthority('ADMIN')")
     public ResponseEntity<PatientAppointmentDtoResponse> make(@Valid @RequestBody AppointmentDtoRequest req) {
-        var res = appointmentService.makeAppointment(req);
+        PatientAppointmentDtoResponse res = appointmentService.makeAppointment(req);
         return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }
 

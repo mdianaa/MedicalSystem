@@ -18,6 +18,8 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
     // Patients registered with a specific GP
     List<Patient> findByGp_Id(Long doctorId);
 
+    Patient findByUser_Email(String email);
+
     int countByGp_Id(Long doctorId);
 
     // Patients who have at least one diagnosis created by doctor

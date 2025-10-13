@@ -19,6 +19,8 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
 
     List<Doctor> findByGpTrue();
 
+    Doctor findByUser_Email(String email);
+
     List<Doctor> findBySpecialization_TypeIgnoreCase(String type);
 
     interface DoctorSickLeaveCount {

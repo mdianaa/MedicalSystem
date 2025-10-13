@@ -1,14 +1,12 @@
 package org.nbu.medicalrecord.dtos.response;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,19 +14,26 @@ import java.time.LocalDate;
 @Setter
 public class VisitDtoResponse {
 
-    private PatientAppointmentDtoResponse patientAppointmentDtoResponse;
+    private long id;
 
-    private String doctorLastName;
+    private long appointmentId;
 
-    private DiagnosisDtoResponse diagnosisDtoResponse;
+    private long doctorId;
 
-    @NotBlank
-    @Size(min = 10, max = 10, message = "Personal ID must be exactly 10 digits.")
-    @Pattern(regexp = "\\d{10}", message = "Personal ID must contain only digits.")
-    private int medicalRecordPatientEgn;
+    private String doctorName;
 
-    private int medicalRecordPatientFirstName;
+    private long patientId;
 
-    private int medicalRecordPatientLastName;
+    private String patientName;
+
+    private long medicalRecordId;
+
+    private LocalDate date;
+
+    private LocalTime hour;
+
+    private long diagnosisId;
+
+    private long sickLeaveId;
 
 }

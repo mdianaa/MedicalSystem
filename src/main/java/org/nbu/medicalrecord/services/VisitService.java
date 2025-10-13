@@ -3,6 +3,7 @@ package org.nbu.medicalrecord.services;
 import org.nbu.medicalrecord.dtos.request.VisitDtoRequest;
 import org.nbu.medicalrecord.dtos.response.VisitDtoResponse;
 
+import java.time.LocalDate;
 import java.time.Month;
 import java.util.Set;
 
@@ -12,9 +13,9 @@ public interface VisitService {
 
     Set<VisitDtoResponse> showAllVisitsByDoctor(long doctorId);
 
-    //TODO: how to represent the time period that should be inserted?
-    // Set<VisitDtoResponse> showAllVisitsForPeriod();
-    // Set<VisitDtoResponse> showAllVisitsByDoctorForPeriod();
+    Set<VisitDtoResponse> showAllVisitsForPatientInPeriod(long patientId, LocalDate from, LocalDate to);
+
+    Set<VisitDtoResponse> showAllVisitsByDoctorInPeriod(long doctorId, LocalDate from, LocalDate to);
 
     Set<VisitDtoResponse> showAllVisitsForPatient(long patientId);
 }

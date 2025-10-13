@@ -5,13 +5,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.Month;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class SpecializationDtoResponse {
+public class MonthWithSickLeavesDtoResponse {
 
-    private Long id;
+    private Month month;
 
-    private String name;
+    private Long count;
 }

@@ -14,26 +14,26 @@ import java.time.LocalTime;
 @Setter
 public class VisitDtoResponse {
 
-    private long id;
+    private Long id;
 
-    private long appointmentId;
+    private Long appointmentId;
 
-    private long doctorId;
+    private Long doctorId;
 
     private String doctorName;
 
-    private long patientId;
+    private Long patientId;
 
     private String patientName;
 
-    private long medicalRecordId;
+    private Long medicalRecordId;
 
     private LocalDate date;
 
     private LocalTime hour;
 
-    private long diagnosisId;
+    private Long diagnosisId;
 
-    private long sickLeaveId;
+    private Long sickLeaveId;
 
 }

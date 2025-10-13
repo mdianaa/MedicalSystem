@@ -19,10 +19,10 @@ import java.time.LocalDate;
 public class SickLeaveDtoRequest {
 
     @NotNull
-    private long doctorId;
+    private Long doctorId;
 
     @NotNull
-    private long patientId;
+    private Long patientId;
 
     @NotNull
     private LocalDate fromDate;

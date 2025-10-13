@@ -15,11 +15,11 @@ import java.time.LocalTime;
 @Setter
 public class PatientAppointmentDtoResponse {
 
-    private long id;
+    private Long id;
 
-    private long patientId;
+    private Long patientId;
 
-    private long doctorId;
+    private Long doctorId;
 
     private String doctorName;
 

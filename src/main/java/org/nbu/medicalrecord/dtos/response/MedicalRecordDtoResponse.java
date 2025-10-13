@@ -17,9 +17,9 @@ import java.util.Set;
 @Setter
 public class MedicalRecordDtoResponse {
 
-    private long id;
+    private Long id;
 
-    private long patientId;
+    private Long patientId;
 
     private String firstName;
 

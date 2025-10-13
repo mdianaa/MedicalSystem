@@ -15,7 +15,7 @@ import java.time.Month;
 public class HealthInsuranceDtoRequest {
 
     @NotNull
-    private long patientId;
+    private Long patientId;
 
     @NotNull
     private Month month;

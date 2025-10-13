@@ -16,6 +16,6 @@ import lombok.Setter;
 public class MedicalRecordDtoRequest {
 
     @NotNull
-    private long patientId;
+    private Long patientId;
 
 }

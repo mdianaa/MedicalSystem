@@ -22,9 +22,9 @@ public class AppointmentDtoRequest {
     private LocalTime hourOfAppointment;
 
     @NotNull
-    private long doctorId;
+    private Long doctorId;
 
     @NotNull
-    private long patientId;
+    private Long patientId;
 
 }

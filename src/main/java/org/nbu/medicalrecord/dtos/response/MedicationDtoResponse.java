@@ -13,7 +13,7 @@ import java.util.List;
 @Setter
 public class MedicationDtoResponse {
 
-    private long id;
+    private Long id;
 
     private String prescription;
 

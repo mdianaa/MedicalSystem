@@ -12,9 +12,9 @@ import org.nbu.medicalrecord.enums.ShiftType;
 @Setter
 public class DoctorsScheduleDtoResponse {
 
-    private long scheduleId;
+    private Long scheduleId;
 
-    private long doctorId;
+    private Long doctorId;
 
     private ShiftType shift;
 

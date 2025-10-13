@@ -14,7 +14,7 @@ import org.nbu.medicalrecord.enums.ShiftType;
 public class DoctorsScheduleDtoRequest {
 
     @NotNull
-    private long doctorId;
+    private Long doctorId;
 
     @NotNull
     private ShiftType shift;

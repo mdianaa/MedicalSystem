@@ -10,17 +10,20 @@ public class AdminCreatePatientRequest {
 
     @NotBlank
     @Size(min=10,max=10)
-    @Pattern(regexp="\\d{10}") String egn;
+    @Pattern(regexp="\\d{10}")
+    private String egn;
 
     @NotBlank
-    @Size(max=30) String firstName;
+    @Size(max=30)
+    private String firstName;
 
     @NotBlank
-    @Size(max=30) String lastName;
+    @Size(max=30)
+    private String lastName;
 
     @NotNull
-    LocalDate birthDate;
+    private LocalDate birthDate;
 
     @Email
-    String email;
+    private String email;
 }

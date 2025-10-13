@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @Setter
 public class PatientDataDtoResponse {
 
-    private long id;
+    private Long id;
 
     private String firstName;
 

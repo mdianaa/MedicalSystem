@@ -15,11 +15,11 @@ public class SickLeaveDtoResponse {
 
     private Long id;
 
-    private long doctorId;
+    private Long doctorId;
 
     private String doctorName;
 
-    private long patientId;
+    private Long patientId;
 
     private String patientName;
 

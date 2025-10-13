@@ -13,7 +13,8 @@ public class AdminCreateDoctorRequest {
 
     @NotBlank
     @Size(min=10,max=10)
-    @Pattern(regexp="\\d{10}") String egn;
+    @Pattern(regexp="\\d{10}")
+    private String egn;
 
     @NotNull
     @Size(max=30)

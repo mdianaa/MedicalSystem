@@ -16,7 +16,7 @@ import java.util.Set;
 @Setter
 public class DiagnosisDtoResponse {
 
-    private long id;
+    private Long id;
 
     private String doctorName;
 

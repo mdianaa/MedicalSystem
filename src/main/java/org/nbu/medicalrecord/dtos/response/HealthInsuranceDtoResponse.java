@@ -13,9 +13,9 @@ import java.time.Month;
 @Setter
 public class HealthInsuranceDtoResponse {
 
-    private long id;
+    private Long id;
 
-    private long patientId;
+    private Long patientId;
 
     private Month month;
 

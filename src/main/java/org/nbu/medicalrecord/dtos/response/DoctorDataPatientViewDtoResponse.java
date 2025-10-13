@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 public class DoctorDataPatientViewDtoResponse {
 
-    private long id;
+    private Long id;
 
     private String firstName;
 

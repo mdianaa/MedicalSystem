@@ -16,10 +16,10 @@ import java.util.Set;
 public class DiagnosisDtoRequest {
 
     @NotNull
-    private long doctorId;
+    private Long doctorId;
 
     @NotNull
-    private long patientId;
+    private Long patientId;
 
     @NotBlank
     private String complaints;

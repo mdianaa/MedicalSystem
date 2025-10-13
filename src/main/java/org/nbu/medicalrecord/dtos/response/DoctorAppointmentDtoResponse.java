@@ -17,9 +17,9 @@ import java.time.LocalTime;
 @Setter
 public class DoctorAppointmentDtoResponse {
 
-    private long id;
+    private Long id;
 
-    private long patientId;
+    private Long patientId;
 
     private String patientName;
 

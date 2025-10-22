@@ -11,9 +11,9 @@ import java.util.Optional;
 @Repository
 public interface PatientRepository extends JpaRepository<Patient, Long> {
 
-    Optional<Patient> findByEgn(String egn);
-
     boolean existsByEgn(String egn);
+
+    boolean existsByIdAndGp_Id(Long patientId, Long doctorId);
 
     // Patients registered with a specific GP
     List<Patient> findByGp_Id(Long doctorId);

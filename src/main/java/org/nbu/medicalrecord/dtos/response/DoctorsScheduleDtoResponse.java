@@ -17,6 +17,4 @@ public class DoctorsScheduleDtoResponse {
     private Long doctorId;
 
     private ShiftType shift;
-
-    int appointmentsCount;
 }

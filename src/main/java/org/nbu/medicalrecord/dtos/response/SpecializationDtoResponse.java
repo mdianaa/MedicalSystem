@@ -13,5 +13,5 @@ public class SpecializationDtoResponse {
 
     private Long id;
 
-    private String name;
+    private String type;
 }

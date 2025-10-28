@@ -85,7 +85,7 @@ public class DoctorServiceImpl implements DoctorService {
         Specialization spec = d.getSpecialization();
         SpecializationDtoResponse specDto = (spec == null)
                 ? null
-                : new SpecializationDtoResponse(spec.getId(), spec.getName());
+                : new SpecializationDtoResponse(spec.getId(), spec.getType());
 
         int count = (d.getGpPatients() == null) ? 0 : d.getGpPatients().size();
 

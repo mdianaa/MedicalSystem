@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 public interface DoctorRepository extends JpaRepository<Doctor, Long> {
 
-    boolean existsByEgn(String egn);
+    boolean existsByUser_Egn(String egn);
 
     boolean existsBySpecialization_Id(Long specializationId);
 

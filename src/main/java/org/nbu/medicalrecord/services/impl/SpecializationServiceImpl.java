@@ -25,12 +25,12 @@ public class SpecializationServiceImpl implements SpecializationService {
     @Override
     @Transactional
     public SpecializationDtoResponse addNewSpecialization(SpecializationDtoRequest req) {
-        String name = normalize(req.getName());
-        if (repo.existsByNameIgnoreCase(name)) {
+        String name = normalize(req.getType());
+        if (repo.existsByTypeIgnoreCase(name)) {
             throw new IllegalStateException("Specialization already exists: " + name);
         }
         Specialization s = new Specialization();
-        s.setName(name);
+        s.setType(name);
         try {
             repo.save(s);
         } catch (DataIntegrityViolationException ex) {
@@ -42,7 +42,7 @@ public class SpecializationServiceImpl implements SpecializationService {
 
     @Override
     public Set<SpecializationDtoResponse> showAllSpecializations() {
-        return repo.findAllByOrderByNameAsc().stream()
+        return repo.findAllByOrderByTypeAsc().stream()
                 .map(this::toDto)
                 .collect(Collectors.toCollection(LinkedHashSet::new));
     }
@@ -63,7 +63,7 @@ public class SpecializationServiceImpl implements SpecializationService {
     }
 
     private SpecializationDtoResponse toDto(Specialization s) {
-        return new SpecializationDtoResponse(s.getId(), s.getName());
+        return new SpecializationDtoResponse(s.getId(), s.getType());
     }
 
     private static String normalize(String s) {

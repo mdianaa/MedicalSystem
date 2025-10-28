@@ -21,5 +21,5 @@ public class Specialization extends BaseEntity {
     @Column()
     @NotBlank
     @Length(max = 30)
-    private String name;
+    private String type;
 }

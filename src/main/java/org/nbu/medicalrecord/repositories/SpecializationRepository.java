@@ -10,9 +10,7 @@ import java.util.Optional;
 @Repository
 public interface SpecializationRepository extends JpaRepository<Specialization, Long> {
 
-    boolean existsByNameIgnoreCase(String name);
+    boolean existsByTypeIgnoreCase(String name);
 
-    Optional<Specialization> findByNameIgnoreCase(String name);
-
-    List<Specialization> findAllByOrderByNameAsc();
+    List<Specialization> findAllByOrderByTypeAsc();
 }

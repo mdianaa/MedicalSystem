@@ -100,7 +100,7 @@ public class PatientServiceImpl implements PatientService {
         Doctor d = p.getGp();
         DoctorDataPatientViewDtoResponse doctor = null;
         if (d != null) {
-            String specName = d.getSpecialization() != null ? d.getSpecialization().getName() : null;
+            String specName = d.getSpecialization() != null ? d.getSpecialization().getType() : null;
             doctor = new DoctorDataPatientViewDtoResponse(
                     d.getId(),
                     d.getUser() != null ? d.getUser().getFirstName() : null,

@@ -9,7 +9,7 @@ spring:
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/medical_record?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
     username: ${DB_USER:root}
-    password: ${DB_PASS:12345}
+    password: ${DB_PASS:12345678}
 
   servlet:
     multipart:
@@ -24,7 +24,7 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     open-in-view: false
     properties:
       hibernate:

@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 public interface PatientRepository extends JpaRepository<Patient, Long> {
 
-    boolean existsByEgn(String egn);
+    boolean existsByUser_Egn(String egn);
 
     boolean existsByIdAndGp_Id(Long patientId, Long doctorId);
 

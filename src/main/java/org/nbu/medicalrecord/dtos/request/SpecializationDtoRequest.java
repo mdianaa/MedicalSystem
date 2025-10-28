@@ -15,5 +15,5 @@ public class SpecializationDtoRequest {
 
     @NotBlank
     @Length(max = 30)
-    private String name;
+    private String type;
 }

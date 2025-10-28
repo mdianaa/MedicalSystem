@@ -35,8 +35,7 @@ public class DoctorsScheduleServiceImpl implements DoctorsScheduleService {
 
         DoctorsSchedule saved = scheduleRepo.save(schedule);
 
-        int count = saved.getAppointments() == null ? 0 : saved.getAppointments().size();
-        return new DoctorsScheduleDtoResponse(saved.getId(), doctor.getId(), saved.getShift(), count);
+        return new DoctorsScheduleDtoResponse(saved.getId(), doctor.getId(), saved.getShift());
     }
 
     @Override

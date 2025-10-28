@@ -28,14 +28,13 @@ public class Doctor extends BaseEntity {
     @ManyToOne
     private Specialization specialization;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "schedule_id", unique = true, nullable = false)
+    @OneToOne(mappedBy = "doctor", fetch = FetchType.LAZY, optional = false)
     private DoctorsSchedule doctorsSchedule;
 
     @Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
     @NotNull
     private boolean gp;
 
-    @OneToMany(mappedBy = "GP")
+    @OneToMany(mappedBy = "gp")
     private Set<Patient> gpPatients;
 }

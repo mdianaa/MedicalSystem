@@ -19,13 +19,10 @@ import java.util.Set;
 public class DoctorsSchedule extends BaseEntity {
 
     @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "doctor_id", unique = true, nullable = false)
+    @JoinColumn(name = "doctor_id", nullable = false, unique = true)
     private Doctor doctor;
 
     @Enumerated(EnumType.STRING)
     @NotNull
     private ShiftType shift;
-
-    @OneToMany()
-    private Set<Appointment> appointments;
 }

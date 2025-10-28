@@ -1,27 +1,30 @@
+vsecurity:
+  jwt:
+    exp-min: 15
+
 spring:
   application:
-    name: "MedicalRecord"
+    name: MedicalRecord
 
-  #Data Source Properties
   datasource:
-    driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/medical_record?createDatabaseIfNotExist=true
-    username: root
-    password: 12345
+    url: jdbc:mysql://127.0.0.1:3306/medical_record?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: ${DB_USER:root}
+    password: ${DB_PASS:12345}
+
   servlet:
     multipart:
       max-file-size: 1MB
       max-request-size: 5MB
+
   mvc:
     hidden method:
       filter:
         enabled: true
 
-  #JPA Properties
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     open-in-view: false
     properties:
       hibernate:
@@ -31,14 +34,13 @@ spring:
 
   jackson:
     serialization:
-      INDENT_OUTPUT: true
+      indent-output: true
 
-  # Server configuration
 server:
   port: 8080
 
-#logging:
-#  level:
-#    org.springframework.security: TRACE
-#    org.springframework.security.web.access: DEBUG
-#    org.springframework.security.web.authentication: DEBUG
+# logging:
+#   level:
+#     org.springframework.security: DEBUG
+#     org.hibernate.SQL: DEBUG
+#     org.hibernate.orm.jdbc.bind: TRACE

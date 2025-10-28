@@ -15,10 +15,10 @@ import java.time.LocalTime;
 @Getter
 @Setter
 @Entity
-@Table(
-        name = "appointments",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"date", "hour_of_visit", "doctor_id"})
-)
+@Table(name = "appointments", indexes = {
+        @Index(name = "idx_appt_doctor_date_hour", columnList = "doctor_id,date,hour_of_visit", unique = true),
+        @Index(name = "idx_appt_patient", columnList = "patient_id")
+})
 public class Appointment extends BaseEntity {
 
     // the patient creates an appointment for a particular doctor

@@ -19,8 +19,8 @@ public class Visit extends BaseEntity {
 
     // преглед
 
-    @OneToOne
-    @JoinColumn(name = "appointment_id")
+    @OneToOne(optional = false)
+    @JoinColumn(name = "appointment_id", nullable = false, unique = true)
     @NotNull
     private Appointment appointment;
 

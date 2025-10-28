@@ -18,7 +18,6 @@ public class AuthorizationHelper {
     private final PatientRepository patientRepository;
     private final AppointmentRepository appointmentRepository;
 
-
     public boolean isDoctor(Authentication authentication, Long doctorId) {
         String email = principalEmail(authentication);
         if (!StringUtils.hasText(email) || doctorId == null) return false;
@@ -35,7 +34,6 @@ public class AuthorizationHelper {
         return patient != null && patientId.equals(patient.getId());
     }
 
-
     /** Is the authenticated doctor the GP of this patient? */
     public boolean isDoctorOfPatient(Authentication authentication, Long patientId) {
         String email = principalEmail(authentication);
@@ -47,14 +45,13 @@ public class AuthorizationHelper {
         return patientRepository.existsByIdAndGp_Id(patientId, doctor.getId());
     }
 
-    /** Did the authenticated doctor create/own this appointment? */
+    /** Does the authenticated doctor own this appointment? */
     public boolean isDoctorOfAppointment(Authentication authentication, Long appointmentId) {
         String email = principalEmail(authentication);
         if (!StringUtils.hasText(email) || appointmentId == null) return false;
 
         Doctor doctor = doctorRepository.findByUser_Email(email);
         if (doctor == null) return false;
-
         return appointmentRepository.existsByIdAndDoctor_Id(appointmentId, doctor.getId());
     }
 

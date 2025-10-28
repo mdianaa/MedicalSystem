@@ -20,6 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @PreAuthorize("hasAuthority('ADMIN')")
 public class AdminUserController {
+
+    // registration logic from the admin
+
     private final RegistrationService registration;
     private final InvitationService invites;
 

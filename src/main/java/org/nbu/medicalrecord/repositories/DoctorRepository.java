@@ -25,6 +25,7 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
 
     interface DoctorSickLeaveCount {
         Long getDoctorId();
+        Long getCount();
     }
 
     @Query("""

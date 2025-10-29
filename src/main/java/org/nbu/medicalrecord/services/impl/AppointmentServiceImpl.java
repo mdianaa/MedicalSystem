@@ -41,9 +41,6 @@ public class AppointmentServiceImpl implements AppointmentService {
         Patient patient = patientRepository.findById(req.getPatientId())
                 .orElseThrow(() -> new IllegalArgumentException("Patient not found"));
 
-        // Optional: validate against doctor's schedule here.
-
-        // Optimistic fast-check; DB unique constraint is the final guard
         if (appointmentRepository.existsByDoctor_IdAndDateAndHourOfAppointment(
                 doctor.getId(), req.getDate(), req.getHourOfAppointment())) {
             throw new IllegalStateException("This slot is already booked.");
@@ -58,7 +55,6 @@ public class AppointmentServiceImpl implements AppointmentService {
         try {
             appointmentRepository.save(a);
         } catch (DataIntegrityViolationException e) {
-            // Race condition safety: unique (doctor_id, date, hour) violated
             throw new IllegalStateException("This slot was just booked by someone else.", e);
         }
 

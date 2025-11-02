@@ -8,7 +8,9 @@ import java.util.Set;
 
 public interface HealthInsuranceService {
 
-    HealthInsuranceDtoResponse createNewHealthInsurance(HealthInsuranceDtoRequest request);
+    HealthInsuranceDtoResponse createNewHealthInsurance(HealthInsuranceDtoRequest req);
+
+    void createMonthlyHealthInsuranceRows();
 
     void payHealthInsuranceForMonthInYear(long patientId, Month month, int year);
 

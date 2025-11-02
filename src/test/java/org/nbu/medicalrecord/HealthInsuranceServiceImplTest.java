@@ -43,7 +43,7 @@ class HealthInsuranceServiceImplTest {
 
         @Test
         @DisplayName("throws when patient not found")
-        void patientNotFound() {
+        void patientNotFound_throws() {
             HealthInsuranceDtoRequest req = new HealthInsuranceDtoRequest();
             req.setPatientId(9L);
             req.setMonth(Month.MARCH);
@@ -59,7 +59,7 @@ class HealthInsuranceServiceImplTest {
 
         @Test
         @DisplayName("throws when entry already exists for month/year")
-        void duplicateEntry() {
+        void duplicateEntry_throws() {
             Patient p = new Patient(); p.setId(3L);
             when(patientRepo.findById(3L)).thenReturn(Optional.of(p));
             when(repo.existsByPatient_IdAndMonthAndYear(3L, Month.APRIL, 2025)).thenReturn(true);
@@ -93,7 +93,6 @@ class HealthInsuranceServiceImplTest {
             req.setPatientId(3L);
             req.setMonth(Month.APRIL);
             req.setYear(2025);
-            req.setPaid(false);
 
             HealthInsuranceDtoResponse out = service.createNewHealthInsurance(req);
 
@@ -120,7 +119,7 @@ class HealthInsuranceServiceImplTest {
 
         @Test
         @DisplayName("throws when entry not found")
-        void notFound() {
+        void notFound_throws() {
             when(repo.findByPatient_IdAndMonthAndYear(5L, Month.JANUARY, 2026))
                     .thenReturn(Optional.empty());
 
@@ -144,14 +143,18 @@ class HealthInsuranceServiceImplTest {
         }
 
         @Test
-        @DisplayName("does nothing (no save) when already paid")
-        void alreadyPaid_noop() {
+        @DisplayName("throws when already paid")
+        void alreadyPaid_throws() {
             HealthInsurance hi = new HealthInsurance();
             hi.setId(1L); hi.setPaid(true);
             when(repo.findByPatient_IdAndMonthAndYear(5L, Month.JANUARY, 2026))
                     .thenReturn(Optional.of(hi));
 
-            service.payHealthInsuranceForMonthInYear(5L, Month.JANUARY, 2026);
+            assertThatThrownBy(() ->
+                    service.payHealthInsuranceForMonthInYear(5L, Month.JANUARY, 2026)
+            )
+                    .isInstanceOf(IllegalStateException.class)
+                    .hasMessageContaining("Already paid");
 
             verify(repo, never()).save(any());
         }
@@ -163,7 +166,7 @@ class HealthInsuranceServiceImplTest {
 
         @Test
         @DisplayName("throws when any month entry is missing")
-        void missingMonth() {
+        void missingMonth_throws() {
             when(repo.findByPatient_IdAndMonthAndYear(6L, Month.FEBRUARY, 2025))
                     .thenReturn(Optional.empty());
 
@@ -174,25 +177,32 @@ class HealthInsuranceServiceImplTest {
         }
 
         @Test
-        @DisplayName("marks only unpaid entries as paid and saves each one")
-        void marksOnlyUnpaid() {
+        @DisplayName("throws if any selected month is already paid")
+        void bulkPay_throwsWhenMonthAlreadyPaid() {
             HealthInsurance hiFeb = new HealthInsurance(); hiFeb.setId(1L); hiFeb.setPaid(false);
             HealthInsurance hiMar = new HealthInsurance(); hiMar.setId(2L); hiMar.setPaid(true);
 
-            when(repo.findByPatient_IdAndMonthAndYear(6L, Month.FEBRUARY, 2025)).thenReturn(Optional.of(hiFeb));
-            when(repo.findByPatient_IdAndMonthAndYear(6L, Month.MARCH, 2025)).thenReturn(Optional.of(hiMar));
+            when(repo.findByPatient_IdAndMonthAndYear(6L, Month.FEBRUARY, 2025))
+                    .thenReturn(Optional.of(hiFeb));
+            when(repo.findByPatient_IdAndMonthAndYear(6L, Month.MARCH, 2025))
+                    .thenReturn(Optional.of(hiMar));
 
-            service.payHealthInsuranceForMonthsInYear(6L, Set.of(Month.FEBRUARY, Month.MARCH), 2025);
+            assertThatThrownBy(() ->
+                    service.payHealthInsuranceForMonthsInYear(6L, Set.of(Month.FEBRUARY, Month.MARCH), 2025)
+            )
+                    .isInstanceOf(IllegalStateException.class)
+                    .hasMessageContaining("Already paid");
 
+            // FEBRUARY might already have been saved before the exception is thrown
             assertThat(hiFeb.isPaid()).isTrue();
             assertThat(hiMar.isPaid()).isTrue();
-            verify(repo, times(1)).save(any(HealthInsurance.class));
         }
+
     }
 
     @Test
     @DisplayName("referenceForLastSixMonthsByPatientId: returns mapped DTOs, keeps repository order, limits to 6")
-    void reference_lastSix() {
+    void referenceLastSix() {
         Patient p = new Patient(); p.setId(7L);
 
         HealthInsurance hi1 = new HealthInsurance(); hi1.setId(1L); hi1.setPatient(p); hi1.setMonth(Month.JUNE); hi1.setYear(2025); hi1.setPaid(true);

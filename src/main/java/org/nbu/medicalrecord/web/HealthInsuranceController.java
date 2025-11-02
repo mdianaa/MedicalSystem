@@ -26,7 +26,7 @@ public class HealthInsuranceController {
             @PathVariable Long patientId,
             @Valid @RequestBody HealthInsuranceDtoRequest req
     ) {
-        HealthInsuranceDtoRequest fixed = new HealthInsuranceDtoRequest(patientId, req.getMonth(), req.getYear(), req.isPaid());
+        HealthInsuranceDtoRequest fixed = new HealthInsuranceDtoRequest(patientId, req.getMonth(), req.getYear());
         HealthInsuranceDtoResponse res = healthInsuranceService.createNewHealthInsurance(fixed);
         return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }

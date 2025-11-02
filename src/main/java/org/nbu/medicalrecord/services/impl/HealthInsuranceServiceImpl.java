@@ -9,14 +9,18 @@ import org.nbu.medicalrecord.entities.Patient;
 import org.nbu.medicalrecord.repositories.HealthInsuranceRepository;
 import org.nbu.medicalrecord.repositories.PatientRepository;
 import org.nbu.medicalrecord.services.HealthInsuranceService;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.Month;
+import java.util.List;
 import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 public class HealthInsuranceServiceImpl implements HealthInsuranceService {
+
     private final HealthInsuranceRepository repo;
     private final PatientRepository patientRepo;
 
@@ -26,7 +30,12 @@ public class HealthInsuranceServiceImpl implements HealthInsuranceService {
         Patient patient = patientRepo.findById(req.getPatientId())
                 .orElseThrow(() -> new IllegalArgumentException("Patient not found"));
 
-        if (repo.existsByPatient_IdAndMonthAndYear(patient.getId(), req.getMonth(), req.getYear())) {
+        boolean exists = repo.existsByPatient_IdAndMonthAndYear(
+                patient.getId(),
+                req.getMonth(),
+                req.getYear()
+        );
+        if (exists) {
             throw new IllegalStateException("Entry already exists for that month/year.");
         }
 
@@ -34,10 +43,48 @@ public class HealthInsuranceServiceImpl implements HealthInsuranceService {
         hi.setPatient(patient);
         hi.setMonth(req.getMonth());
         hi.setYear(req.getYear());
-        hi.setPaid(req.isPaid());
+        // unpaid at creation time
+        hi.setPaid(false);
 
         repo.save(hi);
         return toDto(hi);
+    }
+
+    @Override
+    /**
+     * Runs at 01:00 on the 1st day of every month.
+     * cron format = second minute hour day-of-month month day-of-week
+     * "0 0 1 1 * *" -> at 01:00 on day 1 of each month
+     */
+    @Scheduled(cron = "0 0 1 1 * *")
+    @Transactional
+    public void createMonthlyHealthInsuranceRows() {
+
+        LocalDate now = LocalDate.now();
+        Month month = now.getMonth();
+        int year = now.getYear();
+
+        // get all patients
+        List<Patient> patients = patientRepo.findAll();
+
+        // for each patient, ensure the row for (month, year) exists
+        for (Patient p : patients) {
+            boolean exists = repo.existsByPatient_IdAndMonthAndYear(
+                    p.getId(),
+                    month,
+                    year
+            );
+
+            if (!exists) {
+                HealthInsurance hi = new HealthInsurance();
+                hi.setPatient(p);
+                hi.setMonth(month);
+                hi.setYear(year);
+                hi.setPaid(false);
+
+                repo.save(hi);
+            }
+        }
     }
 
     @Override
@@ -45,10 +92,13 @@ public class HealthInsuranceServiceImpl implements HealthInsuranceService {
     public void payHealthInsuranceForMonthInYear(long patientId, Month month, int year) {
         HealthInsurance hi = repo.findByPatient_IdAndMonthAndYear(patientId, month, year)
                 .orElseThrow(() -> new IllegalArgumentException("Health insurance entry not found"));
-        if (!hi.isPaid()) {
-            hi.setPaid(true);
-            repo.save(hi);
+
+        if (hi.isPaid()) {
+            throw new IllegalStateException("Already paid for " + month + " " + year);
         }
+
+        hi.setPaid(true);
+        repo.save(hi);
     }
 
     @Override
@@ -56,11 +106,15 @@ public class HealthInsuranceServiceImpl implements HealthInsuranceService {
     public void payHealthInsuranceForMonthsInYear(long patientId, Set<Month> months, int year) {
         for (Month m : months) {
             HealthInsurance hi = repo.findByPatient_IdAndMonthAndYear(patientId, m, year)
-                    .orElseThrow(() -> new IllegalArgumentException("Entry not found for " + m + " " + year));
-            if (!hi.isPaid()) {
-                hi.setPaid(true);
-                repo.save(hi);
+                    .orElseThrow(() -> new IllegalArgumentException(
+                            "Entry not found for " + m + " " + year));
+
+            if (hi.isPaid()) {
+                throw new IllegalStateException("Already paid for " + m + " " + year);
             }
+
+            hi.setPaid(true);
+            repo.save(hi);
         }
     }
 

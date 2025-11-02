@@ -22,6 +22,4 @@ public class HealthInsuranceDtoRequest {
 
     @Min(1900)
     private int year;
-
-    private boolean paid;
 }

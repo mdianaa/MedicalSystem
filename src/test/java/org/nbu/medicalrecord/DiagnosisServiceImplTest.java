@@ -48,7 +48,7 @@ class DiagnosisServiceImplTest {
 
         @Test
         @DisplayName("creates diagnosis with medication when doctor/patient exist and all medicineIds are valid")
-        void happyPath_withMedication() {
+        void createDiagnosisWithMedicationSuccessfully() {
             // doctor
             Doctor doctor = new Doctor();
             doctor.setId(2L);
@@ -119,7 +119,7 @@ class DiagnosisServiceImplTest {
 
         @Test
         @DisplayName("creates diagnosis with NO medication when medication request is null")
-        void path_withoutMedication() {
+        void createDiagnosisWithoutMedicationSuccessfully() {
             Doctor doctor = new Doctor(); doctor.setId(5L);
             User du = new User(); du.setFirstName("Doc"); du.setLastName("Tor");
             doctor.setUser(du);
@@ -151,7 +151,7 @@ class DiagnosisServiceImplTest {
 
         @Test
         @DisplayName("throws when doctor is not found")
-        void doctorMissing() {
+        void doctorNotFound_throws() {
             when(doctorRepository.findById(123L)).thenReturn(Optional.empty());
 
             DiagnosisDtoRequest req = new DiagnosisDtoRequest();
@@ -166,7 +166,7 @@ class DiagnosisServiceImplTest {
 
         @Test
         @DisplayName("throws when patient is not found")
-        void patientMissing() {
+        void patientNotFound_throws() {
             Doctor doctor = new Doctor(); doctor.setId(1L);
             when(doctorRepository.findById(1L)).thenReturn(Optional.of(doctor));
             when(patientRepository.findById(2L)).thenReturn(Optional.empty());
@@ -184,7 +184,7 @@ class DiagnosisServiceImplTest {
 
         @Test
         @DisplayName("throws when some medicineIds do not exist")
-        void missingMedicines() {
+        void medicinesNotFound_throws() {
             Doctor doctor = new Doctor(); doctor.setId(10L);
             when(doctorRepository.findById(10L)).thenReturn(Optional.of(doctor));
 
@@ -213,7 +213,7 @@ class DiagnosisServiceImplTest {
 
     @Test
     @DisplayName("showAllDiagnosisForPatientId: maps to DTO and returns a linked set")
-    void showAllForPatient() {
+    void showAllDiagnosisForPatient() {
         Diagnosis d1 = new Diagnosis(); d1.setId(1L);
         Diagnosis d2 = new Diagnosis(); d2.setId(2L);
 
@@ -244,7 +244,7 @@ class DiagnosisServiceImplTest {
 
     @Test
     @DisplayName("showAllDiagnosisByDoctorId: maps to DTO for each entity")
-    void showAllByDoctor() {
+    void showAllDiagnosisByDoctor() {
         Diagnosis d1 = new Diagnosis(); d1.setId(10L);
         Diagnosis d2 = new Diagnosis(); d2.setId(11L);
 

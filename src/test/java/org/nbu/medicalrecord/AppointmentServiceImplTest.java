@@ -79,7 +79,7 @@ class AppointmentServiceImplTest {
 
         @Test
         @DisplayName("rejects past dates")
-        void rejectsPast() {
+        void rejectsPastDates() {
             var req = new AppointmentDtoRequest(LocalDate.now().minusDays(1), LocalTime.of(10, 0), 1L, 2L);
             assertThatThrownBy(() -> service.makeAppointment(req))
                     .isInstanceOf(IllegalArgumentException.class)
@@ -89,7 +89,7 @@ class AppointmentServiceImplTest {
 
         @Test
         @DisplayName("throws when doctor not found")
-        void doctorNotFound() {
+        void doctorNotFound_throws() {
             var req = new AppointmentDtoRequest(LocalDate.now().plusDays(1), LocalTime.of(9, 0), 99L, 1L);
             when(doctorRepository.findById(99L)).thenReturn(Optional.empty());
             assertThatThrownBy(() -> service.makeAppointment(req))
@@ -99,7 +99,7 @@ class AppointmentServiceImplTest {
 
         @Test
         @DisplayName("throws when patient not found")
-        void patientNotFound() {
+        void patientNotFound_throws() {
             var req = new AppointmentDtoRequest(LocalDate.now().plusDays(1), LocalTime.of(9, 0), 5L, 77L);
             when(doctorRepository.findById(5L)).thenReturn(Optional.of(mkDoctor(5L, "Ana", "Dimitrova")));
             when(patientRepository.findById(77L)).thenReturn(Optional.empty());
@@ -110,7 +110,7 @@ class AppointmentServiceImplTest {
 
         @Test
         @DisplayName("throws when slot already booked (existsBy... = true)")
-        void slotAlreadyBooked_fastCheck() {
+        void slotAlreadyBooked_throws() {
             var date = LocalDate.now().plusDays(2);
             var time = LocalTime.of(10, 30);
             var req = new AppointmentDtoRequest(date, time, 5L, 7L);
@@ -128,7 +128,7 @@ class AppointmentServiceImplTest {
 
         @Test
         @DisplayName("saves successfully and returns PatientAppointmentDtoResponse with doctorName")
-        void happyPath() {
+        void saveAppointmentSuccessfully() {
             var date = LocalDate.now().plusDays(3);
             var time = LocalTime.of(11, 0);
             var req = new AppointmentDtoRequest(date, time, 5L, 7L);
@@ -187,7 +187,7 @@ class AppointmentServiceImplTest {
 
     @Test
     @DisplayName("showAllAvailableAppointmentsByDoctorId: filters by patient null, sorts by date then time, maps DTO")
-    void showAvailable_sortedAndMapped() {
+    void showAvailableAppointmentsWithDoctor_sortedAndMapped() {
         var d = mkDoctor(2L, "Ana", "Dimitrova");
         var date = LocalDate.now().plusDays(1);
         var a1 = mkAppt(1L, d, null, date.plusDays(1), LocalTime.of(14, 0));
@@ -242,7 +242,7 @@ class AppointmentServiceImplTest {
 
     @Test
     @DisplayName("showAllOccupiedAppointmentsById: only with patient != null, sorted and mapped to DoctorAppointmentDtoResponse")
-    void showOccupied_sortedAndMapped() {
+    void showOccupiedAppointments_sortedAndMapped() {
         var d = mkDoctor(4L, "Ana", "D");
         var p1 = mkPatient(7L, "Ivan", "P");
         var p2 = mkPatient(8L, "Maya", "I");
@@ -262,7 +262,7 @@ class AppointmentServiceImplTest {
 
     @Test
     @DisplayName("cancelAppointment: delegates to repository.deleteById")
-    void cancelAppointment_deletes() {
+    void cancelAppointment_deletesSuccessfully() {
         service.cancelAppointment(55L);
         verify(appointmentRepository).deleteById(55L);
     }

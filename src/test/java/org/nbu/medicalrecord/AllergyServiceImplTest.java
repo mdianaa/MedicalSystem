@@ -37,27 +37,22 @@ class AllergyServiceImplTest {
 
         @Test
         @DisplayName("saves new allergy with normalized allergen and returns DTO with diagnosesCount=0")
-        void addAllergy_happyPath_normalizesAndSaves() {
-            // given
+        void addNewAllergy() {
             AllergyDtoRequest req = new AllergyDtoRequest();
-            req.setAllergen("  PoLlEn  ");
+            req.setAllergen("  PoLlEn  "); // will be normalized to "pollen"
             req.setAllergyType(AllergyType.POLLEN);
 
             when(allergyRepository.existsByAllergenIgnoreCase("pollen")).thenReturn(false);
-            // simulate that JPA sets an ID on save (service returns DTO from the entity it saved)
             doAnswer(inv -> {
                 Allergy a = inv.getArgument(0, Allergy.class);
                 a.setId(42L);
                 return null;
             }).when(allergyRepository).save(any(Allergy.class));
 
-            // when
             AllergyDtoResponse out = service.addAllergy(req);
 
-            // then: repository checks with normalized value
             verify(allergyRepository).existsByAllergenIgnoreCase("pollen");
 
-            // then: saved entity has normalized fields
             ArgumentCaptor<Allergy> captor = ArgumentCaptor.forClass(Allergy.class);
             verify(allergyRepository).save(captor.capture());
             Allergy saved = captor.getValue();
@@ -65,7 +60,6 @@ class AllergyServiceImplTest {
             assertThat(saved.getAllergyType()).isEqualTo(AllergyType.POLLEN);
             assertThat(saved.getDiagnoses()).isNull();
 
-            // and DTO mirrors the saved entity and sets diagnosesCount=0
             assertThat(out.getId()).isEqualTo(42L);
             assertThat(out.getAllergen()).isEqualTo("pollen");
             assertThat(out.getAllergyType()).isEqualTo(AllergyType.POLLEN);
@@ -74,7 +68,7 @@ class AllergyServiceImplTest {
 
         @Test
         @DisplayName("throws IllegalStateException when allergy already exists (case-insensitive)")
-        void addAllergy_duplicate_throws() {
+        void addDuplicateAllergy_throws() {
             AllergyDtoRequest req = new AllergyDtoRequest();
             req.setAllergen("  MILK ");
             req.setAllergyType(AllergyType.FOOD);
@@ -94,7 +88,7 @@ class AllergyServiceImplTest {
 
         @Test
         @DisplayName("returns DTO with diagnosesCount=0 when diagnoses is null")
-        void showAllergy_nullDiagnoses_count0() {
+        void showAllergyWithNullDiagnosesReturnsCount0() {
             Allergy a = new Allergy();
             a.setId(7L);
             a.setAllergen("pollen");
@@ -113,7 +107,7 @@ class AllergyServiceImplTest {
 
         @Test
         @DisplayName("returns DTO with diagnosesCount=size when diagnoses is non-empty")
-        void showAllergy_withDiagnoses_countsSize() {
+        void showAllergyWithDiagnosesCountsSize() {
             Allergy a = new Allergy();
             a.setId(8L);
             a.setAllergen("milk");
@@ -131,7 +125,7 @@ class AllergyServiceImplTest {
 
         @Test
         @DisplayName("throws IllegalArgumentException when allergy not found")
-        void showAllergy_notFound_throws() {
+        void showAllergyNotFound_throws() {
             when(allergyRepository.findWithDiagnosesByAllergenIgnoreCase("unknown"))
                     .thenReturn(Optional.empty());
 
@@ -147,7 +141,7 @@ class AllergyServiceImplTest {
 
         @Test
         @DisplayName("deletes when allergy exists and has no diagnoses")
-        void deleteAllergy_ok() {
+        void deleteAllergySuccessfully() {
             Allergy a = new Allergy();
             a.setId(9L);
             a.setAllergen("pollen");
@@ -163,7 +157,7 @@ class AllergyServiceImplTest {
 
         @Test
         @DisplayName("throws IllegalArgumentException when allergy not found")
-        void deleteAllergy_notFound_throws() {
+        void deleteAllergyNotFound_throws() {
             when(allergyRepository.findWithDiagnosesByAllergenIgnoreCase("missing"))
                     .thenReturn(Optional.empty());
 
@@ -175,7 +169,7 @@ class AllergyServiceImplTest {
 
         @Test
         @DisplayName("throws IllegalStateException when allergy has diagnoses (is referenced)")
-        void deleteAllergy_referenced_throws() {
+        void deleteAllergyReferenced_throws() {
             Allergy a = new Allergy();
             a.setId(10L);
             a.setAllergen("milk");

@@ -37,7 +37,7 @@ class DoctorsScheduleServiceImplTest {
 
         @Test
         @DisplayName("throws when doctor is not found")
-        void doctorNotFound() {
+        void doctorNotFound_throws() {
             DoctorsScheduleDtoRequest req = new DoctorsScheduleDtoRequest();
             req.setDoctorId(42L);
             req.setShift(ShiftType.FIRST_SHIFT);
@@ -118,7 +118,7 @@ class DoctorsScheduleServiceImplTest {
 
         @Test
         @DisplayName("throws when schedule not found")
-        void scheduleNotFound() {
+        void scheduleNotFoundP_throws() {
             when(scheduleRepo.findById(99L)).thenReturn(Optional.empty());
             assertThatThrownBy(() -> service.deleteSchedule(1L, 99L))
                     .isInstanceOf(IllegalArgumentException.class)
@@ -128,7 +128,7 @@ class DoctorsScheduleServiceImplTest {
 
         @Test
         @DisplayName("throws when schedule does NOT belong to the given doctor")
-        void wrongOwner() {
+        void wrongOwner_throws() {
             Doctor other = new Doctor(); other.setId(2L);
             DoctorsSchedule schedule = new DoctorsSchedule(); schedule.setId(9L); schedule.setDoctor(other);
 
@@ -142,7 +142,7 @@ class DoctorsScheduleServiceImplTest {
 
         @Test
         @DisplayName("deletes when schedule belongs to the doctor")
-        void deletesOk() {
+        void deletesSuccessfully() {
             Doctor d = new Doctor(); d.setId(4L);
             DoctorsSchedule schedule = new DoctorsSchedule(); schedule.setId(12L); schedule.setDoctor(d);
 

@@ -43,7 +43,7 @@ class DoctorServiceImplTest {
 
         @Test
         @DisplayName("throws when doctor not found")
-        void doctorNotFound() {
+        void doctorNotFound_throws() {
             when(doctorRepository.findById(9L)).thenReturn(Optional.empty());
             assertThatThrownBy(() -> service.addNewPatientForGpById(1L, 9L))
                     .isInstanceOf(IllegalArgumentException.class)
@@ -53,7 +53,7 @@ class DoctorServiceImplTest {
 
         @Test
         @DisplayName("throws when doctor exists but is not GP")
-        void doctorNotGp() {
+        void doctorNotGp_throws() {
             Doctor d = new Doctor();
             d.setId(5L);
             d.setGp(false);
@@ -67,7 +67,7 @@ class DoctorServiceImplTest {
 
         @Test
         @DisplayName("throws when patient not found")
-        void patientNotFound() {
+        void patientNotFound_throws() {
             Doctor gp = new Doctor();
             gp.setId(2L);
             gp.setGp(true);
@@ -82,7 +82,7 @@ class DoctorServiceImplTest {
 
         @Test
         @DisplayName("sets patient's GP and returns PatientDataDtoResponse")
-        void happyPath() {
+        void setPatientGPSuccessfully() {
             Doctor gp = new Doctor();
             gp.setId(3L);
             gp.setGp(true);
@@ -117,7 +117,7 @@ class DoctorServiceImplTest {
 
         @Test
         @DisplayName("throws when doctor (gp) not found")
-        void gpMissing() {
+        void gpMissing_throws() {
             when(doctorRepository.findById(88L)).thenReturn(Optional.empty());
             assertThatThrownBy(() -> service.countTotalPatientsForGpById(88L))
                     .isInstanceOf(IllegalArgumentException.class)
@@ -227,7 +227,7 @@ class DoctorServiceImplTest {
 
     @Test
     @DisplayName("showAllDoctorsWithMostSickLeavesGiven: uses counts order, maps via findAll() index")
-    void showMostSickLeavesGiven_mapsAndOrders() {
+    void showMostSickLeavesGiven_sortedAndMapped() {
         DoctorRepository.DoctorSickLeaveCount c1 = new DoctorRepository.DoctorSickLeaveCount() {
             @Override
             public Long getDoctorId() { return 2L; }

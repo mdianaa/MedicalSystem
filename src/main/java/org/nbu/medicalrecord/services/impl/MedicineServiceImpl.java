@@ -43,7 +43,11 @@ public class MedicineServiceImpl implements MedicineService {
 
     @Override
     public Set<MedicineDtoResponse> showAllMedicines() {
-        return medicineRepository.findAll().stream().map(this::toDto).collect(Collectors.toSet());
+        return medicineRepository
+                .findAll()
+                .stream().
+                map(this::toDto)
+                .collect(Collectors.toSet());
     }
 
     @Override

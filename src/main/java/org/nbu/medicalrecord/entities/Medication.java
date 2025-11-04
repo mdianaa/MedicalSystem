@@ -6,8 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.nbu.medicalrecord.enums.MedicineType;
-
 import java.util.Set;
 
 @AllArgsConstructor

@@ -9,7 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
-import org.nbu.medicalrecord.enums.MedicineType;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,5 +25,6 @@ public class MedicineDtoRequest {
     private int mg;
 
     @NotNull
-    private MedicineType medicineType;
+    @Length(max = 30)
+    private String medicineType;
 }

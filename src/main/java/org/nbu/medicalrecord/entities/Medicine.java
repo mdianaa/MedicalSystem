@@ -10,7 +10,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
-import org.nbu.medicalrecord.enums.MedicineType;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -31,6 +30,8 @@ public class Medicine extends BaseEntity {
     @Min(1)
     private int mg;
 
-    @Enumerated(EnumType.STRING)
-    private MedicineType medicineType;
+    @Column()
+    @NotBlank
+    @Length(max = 30)
+    private String medicineType;
 }

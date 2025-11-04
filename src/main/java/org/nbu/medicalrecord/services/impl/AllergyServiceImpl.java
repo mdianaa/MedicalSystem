@@ -27,7 +27,6 @@ public class AllergyServiceImpl implements AllergyService {
 
         Allergy a = new Allergy();
         a.setAllergen(name);
-        a.setAllergyType(req.getAllergyType());
         a.setDiagnoses(null);
 
         allergyRepository.save(a);
@@ -59,6 +58,6 @@ public class AllergyServiceImpl implements AllergyService {
     }
 
     private static AllergyDtoResponse toDto(Allergy a, long diagnosesCount) {
-        return new AllergyDtoResponse(a.getId(), a.getAllergen(), a.getAllergyType(), diagnosesCount);
+        return new AllergyDtoResponse(a.getId(), a.getAllergen(), diagnosesCount);
     }
 }

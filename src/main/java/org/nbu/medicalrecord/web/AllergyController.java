@@ -11,7 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/allergies")
+@RequestMapping("/allergy")
 @RequiredArgsConstructor
 public class AllergyController {
 
@@ -32,6 +32,7 @@ public class AllergyController {
         return allergyService.showAllergy(allergen);
     }
 
+    // Only ADMIN can delete by default
     @DeleteMapping("/{allergen}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable String allergen) {

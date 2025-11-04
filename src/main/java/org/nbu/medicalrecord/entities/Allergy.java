@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.nbu.medicalrecord.enums.AllergyType;
 
 import java.util.Set;
 
@@ -21,9 +20,6 @@ public class Allergy extends BaseEntity {
     @Column()
     @NotBlank
     private String allergen;
-
-    @Enumerated(EnumType.STRING)
-    private AllergyType allergyType;
 
     @ManyToMany(mappedBy = "allergies", targetEntity = Diagnosis.class)
     private Set<Diagnosis> diagnoses;

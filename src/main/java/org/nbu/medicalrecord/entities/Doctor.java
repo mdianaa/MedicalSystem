@@ -28,9 +28,6 @@ public class Doctor extends BaseEntity {
     @ManyToOne
     private Specialization specialization;
 
-    @OneToOne(mappedBy = "doctor", fetch = FetchType.LAZY, optional = false)
-    private DoctorsSchedule doctorsSchedule;
-
     @Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
     @NotNull
     private boolean gp;

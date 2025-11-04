@@ -52,7 +52,6 @@ public class SpecializationServiceImpl implements SpecializationService {
             throw new IllegalArgumentException("Specialization not found");
         }
 
-        // Prevent delete when any doctor references this specialization
         if (doctorRepo.existsBySpecialization_Id(specializationId)) {
             throw new IllegalStateException("Cannot delete specialization: it is used by at least one doctor.");
         }

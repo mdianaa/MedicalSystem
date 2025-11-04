@@ -63,8 +63,9 @@ public class DiagnosisServiceImpl implements DiagnosisService {
 
     @Override
     public Set<DiagnosisDtoResponse> showAllDiagnosisForPatientId(Long patientId) {
-        patientRepository.findById(patientId)
-                .orElseThrow(() -> new IllegalArgumentException("Patient with id " + patientId + " not found"));
+        if (patientRepository.findById(patientId).isEmpty()) {
+            throw new IllegalArgumentException("Patient with id " + patientId + " not found");
+        }
 
         return diagnosisRepository.findByPatient_Id(patientId).stream()
                 .map(this::toDto)
@@ -73,8 +74,9 @@ public class DiagnosisServiceImpl implements DiagnosisService {
 
     @Override
     public Set<DiagnosisDtoResponse> showAllDiagnosisByDoctorId(Long doctorId) {
-        doctorRepository.findById(doctorId)
-                .orElseThrow(() -> new IllegalArgumentException("Doctor with id " + doctorId + " not found"));
+        if (doctorRepository.findById(doctorId).isEmpty()) {
+            throw new IllegalArgumentException("Doctor with id " + doctorId + " not found");
+        }
 
         return diagnosisRepository.findByDoctor_Id(doctorId).stream()
                 .map(this::toDto)
@@ -93,12 +95,12 @@ public class DiagnosisServiceImpl implements DiagnosisService {
                 .collect(Collectors.toSet());
 
         // Return one sample row per top result
-        return diagnosisRepository.findAll().stream()
+        return new LinkedHashSet<>(diagnosisRepository.findAll().stream()
                 .filter(d -> topResults.contains(d.getDiagnosisResult()))
                 .collect(Collectors.toMap(
                         Diagnosis::getDiagnosisResult, this::toDto, (a, b) -> a, LinkedHashMap::new
                 ))
-                .values().stream().collect(Collectors.toCollection(LinkedHashSet::new));
+                .values());
     }
 
     @Override

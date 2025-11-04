@@ -25,8 +25,9 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public Set<PatientDataWithDoctorDtoResponse> showAllPatientsWithGP(long doctorId) {
-        doctorRepository.findById(doctorId)
-                .orElseThrow(() -> new IllegalArgumentException("Doctor with id " + doctorId + " not found"));
+        if (doctorRepository.findById(doctorId).isEmpty()) {
+            throw new IllegalArgumentException("Doctor with id " + doctorId + " not found");
+        }
 
         return patientRepository.findByGp_Id(doctorId).stream()
                 .sorted(byNameThenId())
@@ -36,8 +37,9 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public int totalCountPatientsWithGP(long doctorId) {
-        doctorRepository.findById(doctorId)
-                .orElseThrow(() -> new IllegalArgumentException("Doctor with id " + doctorId + " not found"));
+        if (doctorRepository.findById(doctorId).isEmpty()) {
+            throw new IllegalArgumentException("Doctor with id " + doctorId + " not found");
+            }
 
         return patientRepository.countByGp_Id(doctorId);
     }
@@ -52,8 +54,9 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public Set<PatientDataWithDoctorDtoResponse> showAllPatientsWhoVisitedDoctor(long doctorId) {
-        doctorRepository.findById(doctorId)
-                .orElseThrow(() -> new IllegalArgumentException("Doctor with id " + doctorId + " not found"));
+        if (doctorRepository.findById(doctorId).isEmpty()) {
+            throw new IllegalArgumentException("Doctor with id " + doctorId + " not found");
+        }
 
         return patientRepository.findDistinctByVisitedDoctor(doctorId).stream()
                 .sorted(byNameThenId())
@@ -63,8 +66,9 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public int totalCountPatientsWhoVisitedDoctor(long doctorId) {
-        doctorRepository.findById(doctorId)
-                .orElseThrow(() -> new IllegalArgumentException("Doctor with id " + doctorId + " not found"));
+        if (doctorRepository.findById(doctorId).isEmpty()) {
+            throw new IllegalArgumentException("Doctor with id " + doctorId + " not found");
+        }
 
         return patientRepository.countDistinctByVisitedDoctor(doctorId);
     }

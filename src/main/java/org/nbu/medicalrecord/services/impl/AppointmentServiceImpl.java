@@ -74,6 +74,10 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public Set<PatientAppointmentDtoResponse> showAllPatientAppointmentsById(Long patientId) {
+        if (patientRepository.findById(patientId).isEmpty()) {
+            throw new IllegalArgumentException("Patient with id " + patientId + " not found");
+        }
+
         return appointmentRepository.findByPatient_Id(patientId).stream()
                 .sorted(Comparator.comparing(Appointment::getDate)
                         .thenComparing(Appointment::getHourOfAppointment))
@@ -83,13 +87,21 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public PatientAppointmentDtoResponse showPatientAppointmentOnDateById(Long patientId, LocalDate date) {
-        var a = appointmentRepository.findByPatient_IdAndDate(patientId, date)
+        if (patientRepository.findById(patientId).isEmpty()) {
+            throw new IllegalArgumentException("Patient with id " + patientId + " not found");
+        }
+
+        Appointment a = appointmentRepository.findByPatient_IdAndDate(patientId, date)
                 .orElseThrow(() -> new IllegalArgumentException("No appointment found on this date"));
         return toPatientDto(a);
     }
 
     @Override
     public Set<DoctorAppointmentDtoResponse> showAllOccupiedAppointmentsById(Long doctorId) {
+        if (doctorRepository.findById(doctorId).isEmpty()) {
+            throw new IllegalArgumentException("Doctor with id " + doctorId + " not found");
+        }
+
         return appointmentRepository.findByDoctor_IdAndPatientIsNotNull(doctorId).stream()
                 .sorted(Comparator.comparing(Appointment::getDate)
                         .thenComparing(Appointment::getHourOfAppointment))

@@ -36,7 +36,7 @@ public class MedicineServiceImpl implements MedicineService {
     @Override
     public MedicineDtoResponse showMedicine(String name, int mg) {
         Medicine m = medicineRepository.findByNameIgnoreCaseAndMg(name.trim(), mg)
-                .orElseThrow(() -> new IllegalArgumentException("Medicine not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Medicine " + name + " not found"));
         return toDto(m);
     }
 

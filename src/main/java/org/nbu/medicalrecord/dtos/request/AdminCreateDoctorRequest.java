@@ -25,5 +25,9 @@ public class AdminCreateDoctorRequest {
     private String lastName;
 
     @NotNull
-    private Specialization specialization;
+    private Long specializationId;
+
+    @Size(min=8, max=100)
+    @NotBlank
+    private String password;
 }

@@ -26,4 +26,8 @@ public class AdminCreatePatientRequest {
 
     @Email
     private String email;
+
+    @Size(min=8, max=100)
+    @NotBlank
+    private String password;
 }

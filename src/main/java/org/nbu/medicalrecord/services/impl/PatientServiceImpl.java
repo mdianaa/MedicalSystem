@@ -6,6 +6,7 @@ import org.nbu.medicalrecord.dtos.response.PatientDataDtoResponse;
 import org.nbu.medicalrecord.dtos.response.PatientDataWithDoctorDtoResponse;
 import org.nbu.medicalrecord.entities.Doctor;
 import org.nbu.medicalrecord.entities.Patient;
+import org.nbu.medicalrecord.repositories.DoctorRepository;
 import org.nbu.medicalrecord.repositories.PatientRepository;
 import org.nbu.medicalrecord.services.PatientService;
 import org.springframework.stereotype.Service;
@@ -20,9 +21,13 @@ import java.util.stream.Collectors;
 public class PatientServiceImpl implements PatientService {
 
     private final PatientRepository patientRepository;
+    private final DoctorRepository doctorRepository;
 
     @Override
     public Set<PatientDataWithDoctorDtoResponse> showAllPatientsWithGP(long doctorId) {
+        doctorRepository.findById(doctorId)
+                .orElseThrow(() -> new IllegalArgumentException("Doctor with id " + doctorId + " not found"));
+
         return patientRepository.findByGp_Id(doctorId).stream()
                 .sorted(byNameThenId())
                 .map(this::toPatientWithDoctorDto)
@@ -31,6 +36,9 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public int totalCountPatientsWithGP(long doctorId) {
+        doctorRepository.findById(doctorId)
+                .orElseThrow(() -> new IllegalArgumentException("Doctor with id " + doctorId + " not found"));
+
         return patientRepository.countByGp_Id(doctorId);
     }
 
@@ -44,6 +52,9 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public Set<PatientDataWithDoctorDtoResponse> showAllPatientsWhoVisitedDoctor(long doctorId) {
+        doctorRepository.findById(doctorId)
+                .orElseThrow(() -> new IllegalArgumentException("Doctor with id " + doctorId + " not found"));
+
         return patientRepository.findDistinctByVisitedDoctor(doctorId).stream()
                 .sorted(byNameThenId())
                 .map(this::toPatientWithDoctorDto)
@@ -52,6 +63,9 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public int totalCountPatientsWhoVisitedDoctor(long doctorId) {
+        doctorRepository.findById(doctorId)
+                .orElseThrow(() -> new IllegalArgumentException("Doctor with id " + doctorId + " not found"));
+
         return patientRepository.countDistinctByVisitedDoctor(doctorId);
     }
 

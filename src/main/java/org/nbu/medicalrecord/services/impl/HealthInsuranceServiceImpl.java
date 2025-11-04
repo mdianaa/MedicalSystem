@@ -28,7 +28,7 @@ public class HealthInsuranceServiceImpl implements HealthInsuranceService {
     @Transactional
     public HealthInsuranceDtoResponse createNewHealthInsurance(HealthInsuranceDtoRequest req) {
         Patient patient = patientRepo.findById(req.getPatientId())
-                .orElseThrow(() -> new IllegalArgumentException("Patient not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Patient with id " + req.getPatientId() + " not found"));
 
         boolean exists = repo.existsByPatient_IdAndMonthAndYear(
                 patient.getId(),

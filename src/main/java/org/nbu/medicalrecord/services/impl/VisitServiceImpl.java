@@ -29,7 +29,7 @@ public class VisitServiceImpl implements VisitService {
     @Transactional
     public VisitDtoResponse createNewVisit(VisitDtoRequest req) {
         var appt = appointmentRepo.findById(req.getAppointmentId())
-                .orElseThrow(() -> new IllegalArgumentException("Appointment not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Appointment with id " + req.getAppointmentId() + " not found"));
 
         if (visitRepo.existsByAppointment_Id(appt.getId())) {
             throw new IllegalStateException("A visit already exists for this appointment.");
@@ -42,12 +42,12 @@ public class VisitServiceImpl implements VisitService {
         var patient = appt.getPatient();
 
         var record = medicalRecordRepo.findByPatient_Id(patient.getId())
-                .orElseThrow(() -> new IllegalArgumentException("Medical record not found for patient"));
+                .orElseThrow(() -> new IllegalArgumentException("Medical record for patient with id " + patient.getId() + " not found"));
 
         Diagnosis diagnosis = null;
         if (req.getDiagnosisId() != null) {
             diagnosis = diagnosisRepo.findById(req.getDiagnosisId())
-                    .orElseThrow(() -> new IllegalArgumentException("Diagnosis not found"));
+                    .orElseThrow(() -> new IllegalArgumentException("Diagnosis with id " + req.getDiagnosisId() + " not found"));
             if (!Objects.equals(diagnosis.getDoctor().getId(), doctor.getId())
                     || !Objects.equals(diagnosis.getPatient().getId(), patient.getId())) {
                 throw new IllegalStateException("Diagnosis must belong to the same doctor and patient.");
@@ -57,7 +57,7 @@ public class VisitServiceImpl implements VisitService {
         SickLeave sickLeave = null;
         if (req.getSickLeaveId() != null) {
             sickLeave = sickLeaveRepo.findById(req.getSickLeaveId())
-                    .orElseThrow(() -> new IllegalArgumentException("Sick leave not found"));
+                    .orElseThrow(() -> new IllegalArgumentException("Sick leave with id " + req.getSickLeaveId() + " not found"));
             if (!Objects.equals(sickLeave.getDoctor().getId(), doctor.getId())
                     || !Objects.equals(sickLeave.getPatient().getId(), patient.getId())) {
                 throw new IllegalStateException("Sick leave must belong to the same doctor and patient.");

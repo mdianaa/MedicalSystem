@@ -39,9 +39,9 @@ public class SickLeaveServiceImpl implements SickLeaveService {
         }
 
         Doctor doctor = doctorRepo.findById(req.getDoctorId())
-                .orElseThrow(() -> new IllegalArgumentException("Doctor not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Doctor with id " + req.getDoctorId() + " not found"));
         Patient patient = patientRepo.findById(req.getPatientId())
-                .orElseThrow(() -> new IllegalArgumentException("Patient not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Patient with id " + req.getPatientId() + " not found"));
 
         SickLeave sl = new SickLeave();
         sl.setDoctor(doctor);

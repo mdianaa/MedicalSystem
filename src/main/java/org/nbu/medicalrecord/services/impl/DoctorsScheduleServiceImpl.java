@@ -6,12 +6,12 @@ import org.nbu.medicalrecord.dtos.request.DoctorsScheduleDtoRequest;
 import org.nbu.medicalrecord.dtos.response.DoctorsScheduleDtoResponse;
 import org.nbu.medicalrecord.entities.Doctor;
 import org.nbu.medicalrecord.entities.DoctorsSchedule;
-import org.nbu.medicalrecord.exceptions.ForbiddenException;
-import org.nbu.medicalrecord.exceptions.NotFoundException;
 import org.nbu.medicalrecord.repositories.DoctorRepository;
 import org.nbu.medicalrecord.repositories.DoctorsScheduleRepository;
 import org.nbu.medicalrecord.services.DoctorsScheduleService;
 import org.springframework.stereotype.Service;
+
+import java.util.Locale;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +24,7 @@ public class DoctorsScheduleServiceImpl implements DoctorsScheduleService {
     @Transactional
     public DoctorsScheduleDtoResponse createNewSchedule(DoctorsScheduleDtoRequest req) {
         Doctor doctor = doctorRepo.findById(req.getDoctorId())
-                .orElseThrow(() -> new IllegalArgumentException("Doctor not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Doctor with id " + req.getDoctorId() + " not found"));
 
         // one schedule per doctor
         DoctorsSchedule schedule = scheduleRepo.findByDoctor_Id(doctor.getId())
@@ -42,10 +42,10 @@ public class DoctorsScheduleServiceImpl implements DoctorsScheduleService {
     @Transactional
     public void deleteSchedule(long doctorId, long scheduleId) {
         var schedule = scheduleRepo.findById(scheduleId)
-                .orElseThrow(() -> new IllegalArgumentException("Schedule not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Schedule with id " + scheduleId + " not found"));
 
         if (schedule.getDoctor().getId() != (doctorId)) {
-            throw new IllegalArgumentException("Schedule does not belong to this doctor");
+            throw new IllegalArgumentException("Schedule does not belong to this doctor with id" + doctorId);
         }
 
         scheduleRepo.delete(schedule);

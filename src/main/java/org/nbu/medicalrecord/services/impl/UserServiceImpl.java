@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
         User user = userRepository.findByEmail(email.trim().toLowerCase())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                .orElseThrow(() -> new UsernameNotFoundException("User with email " + email + " not found"));
 
         List<SimpleGrantedAuthority> authorities = user.getAuthorities().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getAuthority()))     // -> List<GrantedAuthority>

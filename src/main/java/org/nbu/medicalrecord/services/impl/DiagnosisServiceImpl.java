@@ -31,9 +31,9 @@ public class DiagnosisServiceImpl implements DiagnosisService {
     @Transactional
     public DiagnosisDtoResponse createDiagnosis(DiagnosisDtoRequest req) {
         Doctor doctor = doctorRepository.findById(req.getDoctorId())
-                .orElseThrow(() -> new IllegalArgumentException("Doctor not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Doctor with id " + req.getDoctorId()+ " not found"));
         Patient patient = patientRepository.findById(req.getPatientId())
-                .orElseThrow(() -> new IllegalArgumentException("Patient not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Patient with id " + req.getPatientId() + " not found"));
 
         Diagnosis d = new Diagnosis();
         d.setDoctor(doctor);
@@ -63,6 +63,9 @@ public class DiagnosisServiceImpl implements DiagnosisService {
 
     @Override
     public Set<DiagnosisDtoResponse> showAllDiagnosisForPatientId(Long patientId) {
+        patientRepository.findById(patientId)
+                .orElseThrow(() -> new IllegalArgumentException("Patient with id " + patientId + " not found"));
+
         return diagnosisRepository.findByPatient_Id(patientId).stream()
                 .map(this::toDto)
                 .collect(Collectors.toCollection(LinkedHashSet::new));
@@ -70,6 +73,9 @@ public class DiagnosisServiceImpl implements DiagnosisService {
 
     @Override
     public Set<DiagnosisDtoResponse> showAllDiagnosisByDoctorId(Long doctorId) {
+        doctorRepository.findById(doctorId)
+                .orElseThrow(() -> new IllegalArgumentException("Doctor with id " + doctorId + " not found"));
+
         return diagnosisRepository.findByDoctor_Id(doctorId).stream()
                 .map(this::toDto)
                 .collect(Collectors.toCollection(LinkedHashSet::new));
@@ -99,7 +105,7 @@ public class DiagnosisServiceImpl implements DiagnosisService {
     @Transactional
     public void deleteDiagnosis(Long diagnosisId) {
         if (!diagnosisRepository.existsById(diagnosisId)) {
-            throw new IllegalArgumentException("Diagnosis not found");
+            throw new IllegalArgumentException("Diagnosis with id " + diagnosisId + " not found");
         }
         diagnosisRepository.deleteById(diagnosisId);
     }

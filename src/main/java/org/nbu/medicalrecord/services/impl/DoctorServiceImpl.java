@@ -27,13 +27,13 @@ public class DoctorServiceImpl implements DoctorService {
     @Transactional
     public PatientDataDtoResponse addNewPatientForGpById(Long patientId, Long doctorId) {
         Doctor gp = doctorRepository.findById(doctorId)
-                .orElseThrow(() -> new IllegalArgumentException("Doctor not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Doctor with id " + doctorId + " not found"));
         if (!gp.isGp()) {
             throw new IllegalStateException("Doctor is not a GP.");
         }
 
         Patient p = patientRepository.findById(patientId)
-                .orElseThrow(() -> new IllegalArgumentException("Patient not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Patient with id " + patientId + " not found"));
 
         p.setGp(gp);
         Patient saved = patientRepository.save(p);
@@ -43,7 +43,7 @@ public class DoctorServiceImpl implements DoctorService {
     @Override
     public int countTotalPatientsForGpById(Long doctorId) {
         Doctor gp = doctorRepository.findById(doctorId)
-                .orElseThrow(() -> new IllegalArgumentException("Doctor not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Doctor with id " + doctorId + " not found"));
         return gp.getGpPatients() == null ? 0 : gp.getGpPatients().size();
     }
 

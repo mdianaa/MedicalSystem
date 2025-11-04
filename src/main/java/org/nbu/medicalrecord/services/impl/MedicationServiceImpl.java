@@ -22,7 +22,7 @@ public class MedicationServiceImpl implements MedicationService {
 
     private final MedicationRepository medicationRepository;
     private final MedicineRepository medicineRepository;
-    private final DiagnosisRepository diagnosisRepository; // used for "by doctor" view
+    private final DiagnosisRepository diagnosisRepository;
 
     @Override
     @Transactional

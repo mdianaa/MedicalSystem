@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.nbu.medicalrecord.dtos.request.MedicineDtoRequest;
 import org.nbu.medicalrecord.dtos.response.MedicineDtoResponse;
 import org.nbu.medicalrecord.entities.Medicine;
-import org.nbu.medicalrecord.enums.MedicineType;
 import org.nbu.medicalrecord.repositories.MedicineRepository;
 import org.nbu.medicalrecord.services.MedicineService;
 import org.springframework.stereotype.Service;
@@ -64,7 +63,7 @@ public class MedicineServiceImpl implements MedicineService {
                 m.getId(),
                 m.getName(),
                 m.getMg(),
-                m.getMedicineType() != null ? m.getMedicineType().toString() : null
+                m.getMedicineType() != null ? m.getMedicineType() : null
         );
     }
 }

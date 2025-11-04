@@ -37,9 +37,9 @@ public class AppointmentServiceImpl implements AppointmentService {
         }
 
         Doctor doctor = doctorRepository.findById(req.getDoctorId())
-                .orElseThrow(() -> new IllegalArgumentException("Doctor not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Doctor with id " + req.getDoctorId() + " not found"));
         Patient patient = patientRepository.findById(req.getPatientId())
-                .orElseThrow(() -> new IllegalArgumentException("Patient not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Patient with id " + req.getPatientId() + " not found"));
 
         if (appointmentRepository.existsByDoctor_IdAndDateAndHourOfAppointment(
                 doctor.getId(), req.getDate(), req.getHourOfAppointment())) {

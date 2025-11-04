@@ -27,16 +27,14 @@ public class SpecializationServiceImpl implements SpecializationService {
     public SpecializationDtoResponse addNewSpecialization(SpecializationDtoRequest req) {
         String name = normalize(req.getType());
         if (repo.existsByTypeIgnoreCase(name)) {
-            throw new IllegalStateException("Specialization already exists: " + name);
+            throw new IllegalStateException("Specialization " + name + " already exists");
         }
+
         Specialization s = new Specialization();
         s.setType(name);
-        try {
-            repo.save(s);
-        } catch (DataIntegrityViolationException ex) {
-            // Safety for race conditions if you add a unique index
-            throw new IllegalStateException("Specialization already exists: " + name, ex);
-        }
+
+        repo.save(s);
+
         return toDto(s);
     }
 

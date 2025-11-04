@@ -26,7 +26,7 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
     @Transactional
     public MedicalRecordDtoResponse createNewMedicalRecord(MedicalRecordDtoRequest req) {
         Patient patient = patientRepo.findById(req.getPatientId())
-                .orElseThrow(() -> new IllegalArgumentException("Patient not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Patient with id " + req.getPatientId() + " not found"));
 
         if (recordRepo.existsByPatient_Id(patient.getId())) {
             throw new IllegalStateException("Medical record already exists for this patient.");
@@ -43,7 +43,7 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
     @Override
     public MedicalRecordDtoResponse showMedicalRecord(long patientId) {
         MedicalRecord rec = recordRepo.findByPatient_Id(patientId)
-                .orElseThrow(() -> new IllegalArgumentException("Medical record not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Medical record for patient with id " + patientId + " not found"));
         return toDto(rec);
     }
 
@@ -58,7 +58,7 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
     @Transactional
     public void deleteMedicalRecord(long medicalRecordId) {
         if (!recordRepo.existsById(medicalRecordId)) {
-            throw new IllegalArgumentException("Medical record not found");
+            throw new IllegalArgumentException("Medical record with id " + medicalRecordId + " not found");
         }
         recordRepo.deleteById(medicalRecordId);
     }

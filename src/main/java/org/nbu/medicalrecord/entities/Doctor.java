@@ -29,7 +29,6 @@ public class Doctor extends BaseEntity {
     private Specialization specialization;
 
     @Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
-    @NotNull
     private boolean gp;
 
     @OneToMany(mappedBy = "gp")

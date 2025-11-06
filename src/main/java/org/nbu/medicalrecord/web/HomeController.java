@@ -23,4 +23,9 @@ public class HomeController {
     public ResponseEntity<Void> homeDoctor() {
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/patient/home")
+    public ResponseEntity<Void> homePatient() {
+        return ResponseEntity.ok().build();
+    }
 }

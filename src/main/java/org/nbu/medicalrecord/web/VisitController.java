@@ -15,34 +15,36 @@ import java.time.LocalDate;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/visits")
+@RequestMapping("/visit")
 @RequiredArgsConstructor
 public class VisitController {
 
     private final VisitService visitService;
 
-    // Create a visit for a completed appointment (doctor/admin)
+    // Create a visit for a completed appointment
     @PostMapping
-    @PreAuthorize("@authz.isDoctorOfAppointment(authentication, #req.appointmentId()) or hasAuthority('ADMIN')")
+    @PreAuthorize("@authz.isDoctorOfAppointment(authentication, #req.appointmentId) or hasAuthority('ADMIN')")
     public ResponseEntity<VisitDtoResponse> create(@Valid @RequestBody VisitDtoRequest req) {
         VisitDtoResponse res = visitService.createNewVisit(req);
         return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }
 
-    // Doctor’s view
+    // Show all visits made by a particular doctor
     @GetMapping("/doctor/{doctorId}")
     @PreAuthorize("@authz.isDoctor(authentication, #doctorId) or hasAuthority('ADMIN')")
     public Set<VisitDtoResponse> byDoctor(@PathVariable long doctorId) {
         return visitService.showAllVisitsByDoctor(doctorId);
     }
 
-    // Patient’s view
+    // Show all visits of a patient
     @GetMapping("/patient/{patientId}")
     @PreAuthorize("@authz.isPatient(authentication, #patientId) or hasAuthority('ADMIN')")
     public Set<VisitDtoResponse> byPatient(@PathVariable long patientId) {
         return visitService.showAllVisitsForPatient(patientId);
     }
 
+    // Show all visits of a patient in a specific time period
+    // TODO
     @GetMapping("/patient/{patientId}/period")
     @PreAuthorize("@authz.isPatient(authentication, #patientId) or hasAuthority('ADMIN')")
     public Set<VisitDtoResponse> patientInPeriod(
@@ -52,6 +54,8 @@ public class VisitController {
         return visitService.showAllVisitsForPatientInPeriod(patientId, from, to);
     }
 
+    // Show all visits made by a doctor in a specific time period
+    // TODO
     @GetMapping("/doctor/{doctorId}/period")
     @PreAuthorize("@authz.isDoctor(authentication, #doctorId) or hasAuthority('ADMIN')")
     public Set<VisitDtoResponse> doctorInPeriod(

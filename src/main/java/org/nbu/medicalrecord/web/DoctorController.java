@@ -19,7 +19,7 @@ public class DoctorController {
 
     private final DoctorService doctorService;
 
-    // Add patient to a GP panel
+    // Add patient to a particular GP doctor
     @PostMapping("/{doctorId}/gp/patients/{patientId}")
     @PreAuthorize("@authz.isDoctor(authentication, #doctorId) or hasAuthority('ADMIN')")
     public ResponseEntity<PatientDataDtoResponse> addPatientForGp(@PathVariable Long doctorId, @PathVariable Long patientId) {
@@ -27,14 +27,14 @@ public class DoctorController {
         return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }
 
-    // Count GP panel size
+    // Count all patients of a GP
     @GetMapping("/{doctorId}/gp/patients/count")
     @PreAuthorize("@authz.isDoctor(authentication, #doctorId) or hasAuthority('ADMIN')")
-    public int countGpPatients(@PathVariable Long doctorId) {
-        return doctorService.countTotalPatientsForGpById(doctorId);
+    public String countGpPatients(@PathVariable Long doctorId) {
+        return "Total count for GP with id " + doctorId +  " : " + doctorService.countTotalPatientsForGpById(doctorId);
     }
 
-    // List GPs
+    // List all GPs
     @GetMapping("/gps")
     @PreAuthorize("hasAnyAuthority('ADMIN','PATIENT','DOCTOR')")
     public Set<DoctorDataDtoResponse> listGps() {
@@ -48,7 +48,7 @@ public class DoctorController {
         return doctorService.showAllDoctors();
     }
 
-    // Filter by specialization (string value)
+    // Filter doctors by specialization
     @GetMapping("/specialization/{type}")
     @PreAuthorize("hasAnyAuthority('ADMIN','PATIENT','DOCTOR')")
     public Set<DoctorDataDtoResponse> bySpecialization(@PathVariable @NotBlank String type) {

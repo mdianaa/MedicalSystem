@@ -14,12 +14,13 @@ import java.time.Month;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/patients/{patientId}/health-insurances")
+@RequestMapping("/patient/{patientId}/health-insurance")
 @RequiredArgsConstructor
 public class HealthInsuranceController {
 
     private final HealthInsuranceService healthInsuranceService;
 
+    // Create health insurance for a patient
     @PostMapping
     @PreAuthorize("@authz.isPatient(authentication, #patientId) or hasAuthority('ADMIN')")
     public ResponseEntity<HealthInsuranceDtoResponse> create(
@@ -31,7 +32,9 @@ public class HealthInsuranceController {
         return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }
 
-    @PostMapping("/pay")
+    // Pay a single health insurance
+    // TODO
+    @PostMapping("/pay/{month}/{year}")
     @PreAuthorize("@authz.isPatient(authentication, #patientId) or hasAuthority('ADMIN')")
     public ResponseEntity<Void> paySingle(
             @PathVariable Long patientId,
@@ -42,6 +45,8 @@ public class HealthInsuranceController {
         return ResponseEntity.noContent().build();
     }
 
+    // Pay a couple of health insurances
+    // TODO
     @PostMapping("/pay/bulk")
     @PreAuthorize("@authz.isPatient(authentication, #patientId) or hasAuthority('ADMIN')")
     public ResponseEntity<Void> payBulk(
@@ -53,10 +58,32 @@ public class HealthInsuranceController {
         return ResponseEntity.noContent().build();
     }
 
+    // Get reference for the last six paid health insurances by a patient
     @GetMapping("/last-six")
     @PreAuthorize("@authz.isPatient(authentication, #patientId) or hasAuthority('ADMIN')")
     public Set<HealthInsuranceDtoResponse> lastSix(@PathVariable Long patientId) {
         return healthInsuranceService.referenceForLastSixMonthsByPatientId(patientId);
+    }
+
+    // Get all health insurances for a patient
+    @GetMapping("/all")
+    @PreAuthorize("@authz.isPatient(authentication, #patientId) or hasAuthority('ADMIN')")
+    public Set<HealthInsuranceDtoResponse> all(@PathVariable Long patientId) {
+        return healthInsuranceService.findAllByPatient(patientId);
+    }
+
+    // Get only paid health insurances for patient
+    @GetMapping("/paid")
+    @PreAuthorize("@authz.isPatient(authentication, #patientId) or hasAuthority('ADMIN')")
+    public Set<HealthInsuranceDtoResponse> paid(@PathVariable Long patientId) {
+        return healthInsuranceService.findAllPaidByPatient(patientId);
+    }
+
+    // Get only unpaid health insurances for patient
+    @GetMapping("/unpaid")
+    @PreAuthorize("@authz.isPatient(authentication, #patientId) or hasAuthority('ADMIN')")
+    public Set<HealthInsuranceDtoResponse> unpaid(@PathVariable Long patientId) {
+        return healthInsuranceService.findAllUnpaidByPatient(patientId);
     }
 }
 

@@ -14,35 +14,35 @@ import java.time.Month;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/sick-leaves")
+@RequestMapping("/sick-leave")
 @RequiredArgsConstructor
 public class SickLeaveController {
 
     private final SickLeaveService sickLeaveService;
 
-    // Create (doctor issues sick leave)
+    // Create sick leave (doctor issues sick leave)
     @PostMapping
-    @PreAuthorize("@authz.isDoctor(authentication, #req.doctorId()) or hasAuthority('ADMIN')")
+    @PreAuthorize("@authz.isDoctor(authentication, #req.doctorId) or hasAuthority('ADMIN')")
     public ResponseEntity<SickLeaveDtoResponse> create(@Valid @RequestBody SickLeaveDtoRequest req) {
         SickLeaveDtoResponse res = sickLeaveService.createSickLeave(req);
         return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }
 
-    // Doctor’s view
+    // Show all sick leaves prescribed by doctor
     @GetMapping("/doctor/{doctorId}")
     @PreAuthorize("@authz.isDoctor(authentication, #doctorId) or hasAuthority('ADMIN')")
     public Set<SickLeaveDtoResponse> byDoctor(@PathVariable long doctorId) {
         return sickLeaveService.showAllSickLeavesByDoctor(doctorId);
     }
 
-    // Patient’s view
+    // Show all sick leaves prescribed to a patient
     @GetMapping("/patient/{patientId}")
     @PreAuthorize("@authz.isPatient(authentication, #patientId) or hasAuthority('ADMIN')")
     public Set<SickLeaveDtoResponse> byPatient(@PathVariable long patientId) {
         return sickLeaveService.showAllSickLeavesForPatient(patientId);
     }
 
-    // Analytics: month with most sick leaves (overall)
+    // Get month with most sick leaves
     @GetMapping("/most-active-month")
     @PreAuthorize("hasAnyAuthority('ADMIN','DOCTOR')")
     public Month mostActiveMonth() {

@@ -64,7 +64,7 @@ class MedicalRecordServiceImplTest {
 
             assertThatThrownBy(() -> service.createNewMedicalRecord(req))
                     .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessageContaining("Patient not found");
+                    .hasMessageContaining("Patient with id 10 not found");
 
             verifyNoInteractions(recordRepo);
         }
@@ -156,7 +156,7 @@ class MedicalRecordServiceImplTest {
 
             assertThatThrownBy(() -> service.showMedicalRecord(99L))
                     .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessageContaining("Medical record not found");
+                    .hasMessageContaining("Medical record for patient with id 99 not found");
         }
     }
 

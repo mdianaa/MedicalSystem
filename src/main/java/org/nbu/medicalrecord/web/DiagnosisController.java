@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/diagnoses")
+@RequestMapping("/diagnosis")
 @RequiredArgsConstructor
 public class DiagnosisController {
 
@@ -21,34 +21,35 @@ public class DiagnosisController {
 
     // Doctor creates a diagnosis for a patient
     @PostMapping
-    @PreAuthorize("@authz.isDoctor(authentication, #req.doctorId()) or hasAuthority('ADMIN')")
+    @PreAuthorize("@authz.isDoctor(authentication, #req.doctorId) or hasAuthority('ADMIN')")
     public ResponseEntity<DiagnosisDtoResponse> create(@Valid @RequestBody DiagnosisDtoRequest req) {
         DiagnosisDtoResponse res = diagnosisService.createDiagnosis(req);
         return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }
 
-    // Patient/Admin view patient’s diagnoses
+    // View patient’s diagnoses
     @GetMapping("/patient/{patientId}")
     @PreAuthorize("@authz.isPatient(authentication, #patientId) or hasAuthority('ADMIN')")
     public Set<DiagnosisDtoResponse> byPatient(@PathVariable Long patientId) {
         return diagnosisService.showAllDiagnosisForPatientId(patientId);
     }
 
-    // Doctor/Admin view doctor’s diagnoses
+    // View doctor’s diagnoses
     @GetMapping("/doctor/{doctorId}")
     @PreAuthorize("@authz.isDoctor(authentication, #doctorId) or hasAuthority('ADMIN')")
     public Set<DiagnosisDtoResponse> byDoctor(@PathVariable Long doctorId) {
         return diagnosisService.showAllDiagnosisByDoctorId(doctorId);
     }
 
-    // Top diagnosis result(s) — useful for analytics dashboards
+    // Top diagnosis result
+    // TODO
     @GetMapping("/most-frequent")
     @PreAuthorize("hasAnyAuthority('DOCTOR','ADMIN')")
     public Set<DiagnosisDtoResponse> mostFrequent() {
         return diagnosisService.showMostFrequentDiagnosisResult();
     }
 
-    // Delete by id — only diagnosing doctor or admin
+    // Delete diagnosis
     @DeleteMapping("/{diagnosisId}")
     @PreAuthorize("@authz.isDiagnosisOwner(authentication, #diagnosisId) or hasAuthority('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable Long diagnosisId) {

@@ -19,6 +19,7 @@ public class MedicationController {
 
     private final MedicationService medicationService;
 
+    // Create new medication
     @PostMapping
     @PreAuthorize("hasAnyAuthority('DOCTOR','ADMIN')")
     public ResponseEntity<MedicationDtoResponse> add(@Valid @RequestBody MedicationDtoRequest req) {
@@ -26,12 +27,15 @@ public class MedicationController {
         return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }
 
-    @GetMapping
+    // Show all medications
+    @GetMapping("/all")
     @PreAuthorize("hasAnyAuthority('DOCTOR','ADMIN')")
     public Set<MedicationDtoResponse> list() {
         return medicationService.showAllMedications();
     }
 
+    // Show all medications by doctor
+    // TODO : medication is not directly related to the doctors or to the diagnosis
     @GetMapping("/doctor/{doctorId}")
     @PreAuthorize("@authz.isDoctor(authentication, #doctorId) or hasAuthority('ADMIN')")
     public Set<MedicationDtoResponse> byDoctor(@PathVariable long doctorId) {

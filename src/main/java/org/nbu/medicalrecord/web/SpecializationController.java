@@ -13,12 +13,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/specializations")
+@RequestMapping("/specialization")
 @RequiredArgsConstructor
 public class SpecializationController {
 
     private final SpecializationService specializationService;
 
+    // Create a new specialization
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<SpecializationDtoResponse> add(@Valid @RequestBody SpecializationDtoRequest req) {
@@ -26,12 +27,14 @@ public class SpecializationController {
         return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }
 
-    @GetMapping
+    // Get all specializations
+    @GetMapping("/all")
     @PreAuthorize("hasAnyAuthority('ADMIN','DOCTOR','PATIENT')")
     public Set<SpecializationDtoResponse> list() {
         return specializationService.showAllSpecializations();
     }
 
+    // Delete a specialization
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable long id) {

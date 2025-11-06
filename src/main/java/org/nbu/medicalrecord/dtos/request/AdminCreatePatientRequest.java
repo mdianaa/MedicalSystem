@@ -1,9 +1,11 @@
 package org.nbu.medicalrecord.dtos.request;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Data
 public class AdminCreatePatientRequest {
@@ -23,6 +25,8 @@ public class AdminCreatePatientRequest {
 
     @NotNull
     private LocalDate birthDate;
+
+    Set<AllergyDtoRequest> allergies;
 
     @Email
     private String email;

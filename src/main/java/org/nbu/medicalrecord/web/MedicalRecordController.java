@@ -13,12 +13,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/medical-records")
+@RequestMapping("/medical-record")
 @RequiredArgsConstructor
 public class MedicalRecordController {
 
     private final MedicalRecordService medicalRecordService;
 
+    // Create Medical Record for a patient
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DOCTOR')")
     public ResponseEntity<MedicalRecordDtoResponse> create(@Valid @RequestBody MedicalRecordDtoRequest req) {
@@ -26,6 +27,7 @@ public class MedicalRecordController {
         return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }
 
+    // Show medical record for a patient
     @GetMapping("/patient/{patientId}")
     @PreAuthorize("@authz.isPatient(authentication, #patientId) "
             + "or @authz.isDoctorOfPatient(authentication, #patientId) "
@@ -34,12 +36,14 @@ public class MedicalRecordController {
         return medicalRecordService.showMedicalRecord(patientId);
     }
 
-    @GetMapping
+    // Show all medical records
+    @GetMapping("/all")
     @PreAuthorize("hasAuthority('ADMIN')")
     public Set<MedicalRecordDtoResponse> listAll() {
         return medicalRecordService.showAllMedicalRecords();
     }
 
+    // Delete medical record
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable long id) {

@@ -1,8 +1,5 @@
 package org.nbu.medicalrecord.dtos.response;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,5 +25,7 @@ public class MedicalRecordDtoResponse {
     private LocalDate birthDate;
 
     private int visitsCount;
+
+    private Set<VisitDtoResponse> visits;
 
 }

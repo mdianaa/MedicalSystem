@@ -41,6 +41,7 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
+    @Transactional
     public int countTotalPatientsForGpById(Long doctorId) {
         Doctor gp = doctorRepository.findById(doctorId)
                 .orElseThrow(() -> new IllegalArgumentException("Doctor with id " + doctorId + " not found"));
@@ -48,6 +49,7 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
+    @Transactional
     public Set<DoctorDataDtoResponse> showAllGPs() {
         return doctorRepository.findByGpTrue().stream()
                 .map(this::toDoctorDto)
@@ -55,6 +57,7 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
+    @Transactional
     public Set<DoctorDataDtoResponse> showAllDoctors() {
         return doctorRepository.findAll().stream()
                 .map(this::toDoctorDto)
@@ -62,6 +65,7 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
+    @Transactional
     public Set<DoctorDataDtoResponse> showAllDoctorsWithSpecialization(String specializationType) {
         return doctorRepository.findBySpecialization_TypeIgnoreCase(specializationType).stream()
                 .map(this::toDoctorDto)
@@ -69,6 +73,7 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
+    @Transactional
     public Set<DoctorDataDtoResponse> showAllDoctorsWithMostSickLeavesGiven() {
         List<DoctorRepository.DoctorSickLeaveCount> counts = doctorRepository.countSickLeavesPerDoctor();
         Map<Long, Doctor> byId = doctorRepository.findAll().stream()
@@ -91,7 +96,8 @@ public class DoctorServiceImpl implements DoctorService {
 
         return new DoctorDataDtoResponse(
                 d.getId(),
-                d.getUser() != null ? d.getUser().getId() : null,
+                d.getUser().getFirstName(),
+                d.getUser().getLastName(),
                 specDto,
                 d.isGp(),
                 count

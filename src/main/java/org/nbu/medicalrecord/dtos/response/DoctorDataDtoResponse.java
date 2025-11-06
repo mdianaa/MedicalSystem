@@ -13,7 +13,9 @@ public class DoctorDataDtoResponse {
 
     private Long id;
 
-    private Long userId;
+    private String firstName;
+
+    private String lastName;
 
     private SpecializationDtoResponse specialization;
 

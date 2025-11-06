@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -62,6 +63,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
+    @Transactional
     public Set<PatientAppointmentDtoResponse> showAllAvailableAppointmentsByDoctorId(Long doctorId) {
         return appointmentRepository
                 .findByDoctor_IdAndPatientIsNullAndDateGreaterThanEqual(doctorId, LocalDate.now())
@@ -73,6 +75,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
+    @Transactional
     public Set<PatientAppointmentDtoResponse> showAllPatientAppointmentsById(Long patientId) {
         if (patientRepository.findById(patientId).isEmpty()) {
             throw new IllegalArgumentException("Patient with id " + patientId + " not found");
@@ -86,17 +89,26 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public PatientAppointmentDtoResponse showPatientAppointmentOnDateById(Long patientId, LocalDate date) {
+    @Transactional
+    public Set<PatientAppointmentDtoResponse> showPatientAppointmentOnDateById(Long patientId, LocalDate date) {
         if (patientRepository.findById(patientId).isEmpty()) {
             throw new IllegalArgumentException("Patient with id " + patientId + " not found");
         }
 
-        Appointment a = appointmentRepository.findByPatient_IdAndDate(patientId, date)
-                .orElseThrow(() -> new IllegalArgumentException("No appointment found on this date"));
-        return toPatientDto(a);
+        List<Appointment> appts = appointmentRepository.findByPatient_IdAndDate(patientId, date);
+        if (appts.isEmpty()) {
+            throw new IllegalArgumentException("No appointments for patient %d on %s".formatted(patientId, date));
+        }
+
+        return appts.stream()
+                .sorted(Comparator.comparing(Appointment::getDate)
+                        .thenComparing(Appointment::getHourOfAppointment))
+                .map(this::toPatientDto)
+                .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     @Override
+    @Transactional
     public Set<DoctorAppointmentDtoResponse> showAllOccupiedAppointmentsById(Long doctorId) {
         if (doctorRepository.findById(doctorId).isEmpty()) {
             throw new IllegalArgumentException("Doctor with id " + doctorId + " not found");

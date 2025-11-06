@@ -16,7 +16,7 @@ public interface AppointmentService {
 
     Set<PatientAppointmentDtoResponse> showAllPatientAppointmentsById(Long patientId);
 
-    PatientAppointmentDtoResponse showPatientAppointmentOnDateById(Long patientId, LocalDate date);
+    Set<PatientAppointmentDtoResponse> showPatientAppointmentOnDateById(Long patientId, LocalDate date);
 
     // doctor’s view
     Set<DoctorAppointmentDtoResponse> showAllOccupiedAppointmentsById(Long doctorId);

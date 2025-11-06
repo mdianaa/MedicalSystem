@@ -8,8 +8,6 @@ public interface PatientService {
 
     Set<PatientDataWithDoctorDtoResponse> showAllPatientsWithGP(long doctorId);
 
-    int totalCountPatientsWithGP(long doctorId);
-
     Set<PatientDataWithDoctorDtoResponse> showAllPatients();
 
     Set<PatientDataWithDoctorDtoResponse> showAllPatientsWhoVisitedDoctor(long doctorId);

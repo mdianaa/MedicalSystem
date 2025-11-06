@@ -29,6 +29,9 @@ public class Patient extends BaseEntity{
     @JoinColumn(name = "user_id", unique = true)
     private User user;
 
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    private Set<Allergy> allergies;  // patient might not have any allergies
+
     @OneToMany(mappedBy = "patient", targetEntity = HealthInsurance.class)
     private Set<HealthInsurance> healthInsurances;
 
@@ -36,7 +39,6 @@ public class Patient extends BaseEntity{
     private MedicalRecord medicalRecord;
 
     @ManyToOne
-    @NotNull
     @JoinColumn(name = "gp_doctor_id")
     private Doctor gp;
 }

@@ -20,7 +20,4 @@ public class Allergy extends BaseEntity {
     @Column()
     @NotBlank
     private String allergen;
-
-    @ManyToMany(mappedBy = "allergies", targetEntity = Diagnosis.class)
-    private Set<Diagnosis> diagnoses;
 }

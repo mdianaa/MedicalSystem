@@ -11,12 +11,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.nbu.medicalrecord.dtos.request.AllergyDtoRequest;
 import org.nbu.medicalrecord.dtos.response.AllergyDtoResponse;
 import org.nbu.medicalrecord.entities.Allergy;
-import org.nbu.medicalrecord.enums.AllergyType;
 import org.nbu.medicalrecord.repositories.AllergyRepository;
 import org.nbu.medicalrecord.services.impl.AllergyServiceImpl;
 
 import java.util.Optional;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -40,7 +38,6 @@ class AllergyServiceImplTest {
         void addNewAllergy() {
             AllergyDtoRequest req = new AllergyDtoRequest();
             req.setAllergen("  PoLlEn  "); // will be normalized to "pollen"
-            req.setAllergyType(AllergyType.POLLEN);
 
             when(allergyRepository.existsByAllergenIgnoreCase("pollen")).thenReturn(false);
             doAnswer(inv -> {
@@ -57,13 +54,9 @@ class AllergyServiceImplTest {
             verify(allergyRepository).save(captor.capture());
             Allergy saved = captor.getValue();
             assertThat(saved.getAllergen()).isEqualTo("pollen");
-            assertThat(saved.getAllergyType()).isEqualTo(AllergyType.POLLEN);
-            assertThat(saved.getDiagnoses()).isNull();
 
             assertThat(out.getId()).isEqualTo(42L);
             assertThat(out.getAllergen()).isEqualTo("pollen");
-            assertThat(out.getAllergyType()).isEqualTo(AllergyType.POLLEN);
-            assertThat(out.getDiagnosesCount()).isEqualTo(0);
         }
 
         @Test
@@ -71,7 +64,6 @@ class AllergyServiceImplTest {
         void addDuplicateAllergy_throws() {
             AllergyDtoRequest req = new AllergyDtoRequest();
             req.setAllergen("  MILK ");
-            req.setAllergyType(AllergyType.FOOD);
 
             when(allergyRepository.existsByAllergenIgnoreCase("milk")).thenReturn(true);
 
@@ -92,17 +84,13 @@ class AllergyServiceImplTest {
             Allergy a = new Allergy();
             a.setId(7L);
             a.setAllergen("pollen");
-            a.setAllergyType(AllergyType.POLLEN);
-            a.setDiagnoses(null);
 
-            when(allergyRepository.findWithDiagnosesByAllergenIgnoreCase("pollen"))
+            when(allergyRepository.findByAllergenIgnoreCase("pollen"))
                     .thenReturn(Optional.of(a));
 
             AllergyDtoResponse out = service.showAllergy("  PoLlEn ");
             assertThat(out.getId()).isEqualTo(7L);
             assertThat(out.getAllergen()).isEqualTo("pollen");
-            assertThat(out.getAllergyType()).isEqualTo(AllergyType.POLLEN);
-            assertThat(out.getDiagnosesCount()).isEqualTo(0);
         }
 
         @Test
@@ -111,22 +99,17 @@ class AllergyServiceImplTest {
             Allergy a = new Allergy();
             a.setId(8L);
             a.setAllergen("milk");
-            a.setAllergyType(AllergyType.FOOD);
-            // we don't need full Diagnosis objects; only the size matters
-            a.setDiagnoses(Set.of(new org.nbu.medicalrecord.entities.Diagnosis(),
-                    new org.nbu.medicalrecord.entities.Diagnosis()));
 
-            when(allergyRepository.findWithDiagnosesByAllergenIgnoreCase("milk"))
+            when(allergyRepository.findByAllergenIgnoreCase("milk"))
                     .thenReturn(Optional.of(a));
 
             AllergyDtoResponse out = service.showAllergy("MiLk");
-            assertThat(out.getDiagnosesCount()).isEqualTo(2);
         }
 
         @Test
         @DisplayName("throws IllegalArgumentException when allergy not found")
         void showAllergyNotFound_throws() {
-            when(allergyRepository.findWithDiagnosesByAllergenIgnoreCase("unknown"))
+            when(allergyRepository.findByAllergenIgnoreCase("unknown"))
                     .thenReturn(Optional.empty());
 
             assertThatThrownBy(() -> service.showAllergy("  unknown "))
@@ -145,9 +128,8 @@ class AllergyServiceImplTest {
             Allergy a = new Allergy();
             a.setId(9L);
             a.setAllergen("pollen");
-            a.setDiagnoses(null); // no references
 
-            when(allergyRepository.findWithDiagnosesByAllergenIgnoreCase("pollen"))
+            when(allergyRepository.findByAllergenIgnoreCase("pollen"))
                     .thenReturn(Optional.of(a));
 
             service.deleteAllergy("  POLLEN ");
@@ -158,7 +140,7 @@ class AllergyServiceImplTest {
         @Test
         @DisplayName("throws IllegalArgumentException when allergy not found")
         void deleteAllergyNotFound_throws() {
-            when(allergyRepository.findWithDiagnosesByAllergenIgnoreCase("missing"))
+            when(allergyRepository.findByAllergenIgnoreCase("missing"))
                     .thenReturn(Optional.empty());
 
             assertThatThrownBy(() -> service.deleteAllergy(" missing "))
@@ -173,9 +155,8 @@ class AllergyServiceImplTest {
             Allergy a = new Allergy();
             a.setId(10L);
             a.setAllergen("milk");
-            a.setDiagnoses(Set.of(new org.nbu.medicalrecord.entities.Diagnosis()));
 
-            when(allergyRepository.findWithDiagnosesByAllergenIgnoreCase("milk"))
+            when(allergyRepository.findByAllergenIgnoreCase("milk"))
                     .thenReturn(Optional.of(a));
 
             assertThatThrownBy(() -> service.deleteAllergy("MiLk"))

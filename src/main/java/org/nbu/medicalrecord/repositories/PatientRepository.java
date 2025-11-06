@@ -15,6 +15,8 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
 
     boolean existsByIdAndGp_Id(Long patientId, Long doctorId);
 
+    boolean existsByAllergies_Id(Long allergyId);
+
     // Patients registered with a specific GP
     List<Patient> findByGp_Id(Long doctorId);
 
@@ -41,23 +43,23 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
     @Query("""
       select distinct d.patient
       from Diagnosis d
-      where d.diagnosisResult = :result
+      where d.diagnosis = :result
     """)
     List<Patient> findDistinctByDiagnosisResult(String result);
 
     @Query("""
       select count(distinct d.patient.id)
       from Diagnosis d
-      where d.diagnosisResult = :result
+      where d.diagnosis = :result
     """)
     int countDistinctByDiagnosisResult(String result);
 
     // Patients with at least one allergy (by allergen name)
     @Query("""
-      select distinct d.patient
-      from Diagnosis d
-      join d.allergies a
-      where lower(a.allergen) = lower(:allergen)
+    select distinct p
+    from Patient p
+    join p.allergies a
+    where lower(a.allergen) = lower(:allergen)
     """)
     List<Patient> findDistinctByAllergen(String allergen);
 }

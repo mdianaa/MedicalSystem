@@ -14,6 +14,4 @@ public class AllergyDtoResponse {
     private Long id;
 
     private String allergen;
-
-    private Long diagnosesCount;
 }

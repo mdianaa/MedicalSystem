@@ -10,6 +10,7 @@ import org.nbu.medicalrecord.repositories.DoctorRepository;
 import org.nbu.medicalrecord.repositories.PatientRepository;
 import org.nbu.medicalrecord.services.PatientService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.LinkedHashSet;
@@ -24,6 +25,7 @@ public class PatientServiceImpl implements PatientService {
     private final DoctorRepository doctorRepository;
 
     @Override
+    @Transactional
     public Set<PatientDataWithDoctorDtoResponse> showAllPatientsWithGP(long doctorId) {
         if (doctorRepository.findById(doctorId).isEmpty()) {
             throw new IllegalArgumentException("Doctor with id " + doctorId + " not found");
@@ -36,15 +38,7 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public int totalCountPatientsWithGP(long doctorId) {
-        if (doctorRepository.findById(doctorId).isEmpty()) {
-            throw new IllegalArgumentException("Doctor with id " + doctorId + " not found");
-            }
-
-        return patientRepository.countByGp_Id(doctorId);
-    }
-
-    @Override
+    @Transactional
     public Set<PatientDataWithDoctorDtoResponse> showAllPatients() {
         return patientRepository.findAll().stream()
                 .sorted(byNameThenId())
@@ -53,6 +47,7 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    @Transactional
     public Set<PatientDataWithDoctorDtoResponse> showAllPatientsWhoVisitedDoctor(long doctorId) {
         if (doctorRepository.findById(doctorId).isEmpty()) {
             throw new IllegalArgumentException("Doctor with id " + doctorId + " not found");
@@ -65,6 +60,7 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    @Transactional
     public int totalCountPatientsWhoVisitedDoctor(long doctorId) {
         if (doctorRepository.findById(doctorId).isEmpty()) {
             throw new IllegalArgumentException("Doctor with id " + doctorId + " not found");
@@ -74,6 +70,7 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    @Transactional
     public Set<PatientDataWithDoctorDtoResponse> showAllPatientsWithResultDiagnosis(String result) {
         return patientRepository.findDistinctByDiagnosisResult(result).stream()
                 .sorted(byNameThenId())
@@ -82,11 +79,13 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    @Transactional
     public int totalCountPatientsWithResultDiagnosis(String result) {
         return patientRepository.countDistinctByDiagnosisResult(result);
     }
 
     @Override
+    @Transactional
     public Set<PatientDataWithDoctorDtoResponse> showAllPatientsWithAllergy(String allergen) {
         return patientRepository.findDistinctByAllergen(allergen).stream()
                 .sorted(byNameThenId())

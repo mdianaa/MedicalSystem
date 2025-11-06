@@ -119,6 +119,39 @@ public class HealthInsuranceServiceImpl implements HealthInsuranceService {
     }
 
     @Override
+    @Transactional
+    public Set<HealthInsuranceDtoResponse> findAllByPatient(Long patientId) {
+        if (patientRepo.findById(patientId).isEmpty()) {
+            throw new IllegalArgumentException("Patient with id " + patientId + " not found");
+        }
+        return repo.findAllByPatientOrderByYearCalendarMonthDesc(patientId).stream()
+                .map(this::toDto)
+                .collect(java.util.stream.Collectors.toCollection(java.util.LinkedHashSet::new));
+    }
+
+    @Override
+    @Transactional
+    public Set<HealthInsuranceDtoResponse> findAllPaidByPatient(Long patientId) {
+        if (patientRepo.findById(patientId).isEmpty()) {
+            throw new IllegalArgumentException("Patient with id " + patientId + " not found");
+        }
+        return repo.findPaidByPatientOrderByYearMonthDesc(patientId).stream()
+                .map(this::toDto)
+                .collect(java.util.stream.Collectors.toCollection(java.util.LinkedHashSet::new));
+    }
+
+    @Override
+    @Transactional
+    public Set<HealthInsuranceDtoResponse> findAllUnpaidByPatient(Long patientId) {
+        if (patientRepo.findById(patientId).isEmpty()) {
+            throw new IllegalArgumentException("Patient with id " + patientId + " not found");
+        }
+        return repo.findUnpaidByPatientOrderByYearMonthDesc(patientId).stream()
+                .map(this::toDto)
+                .collect(java.util.stream.Collectors.toCollection(java.util.LinkedHashSet::new));
+    }
+
+    @Override
     public Set<HealthInsuranceDtoResponse> referenceForLastSixMonthsByPatientId(Long patientId) {
         return repo.findAllByPatientOrderByYearMonthDesc(patientId).stream()
                 .limit(6)

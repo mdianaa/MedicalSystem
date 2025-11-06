@@ -20,6 +20,7 @@ public class HealthInsuranceDtoRequest {
     @NotNull
     private Month month;
 
-    @Min(1900)
-    private int year;
+    @Min(2000)
+    @NotNull
+    private Integer year;
 }

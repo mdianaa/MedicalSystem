@@ -26,9 +26,9 @@ public class HealthInsurance extends BaseEntity {
     @Column
     private Month month;
 
-    @NotBlank
+    @NotNull
     @Column()
-    private int year;
+    private Integer year;
 
     @NotNull
     @Column(name = "is_paid", columnDefinition = "BOOLEAN DEFAULT FALSE")

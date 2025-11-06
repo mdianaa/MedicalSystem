@@ -17,4 +17,10 @@ public interface HealthInsuranceService {
     void payHealthInsuranceForMonthsInYear(long patientId, Set<Month> months, int year);
 
     Set<HealthInsuranceDtoResponse> referenceForLastSixMonthsByPatientId(Long patientId);
+
+    Set<HealthInsuranceDtoResponse> findAllByPatient(Long patientId);
+
+    Set<HealthInsuranceDtoResponse> findAllPaidByPatient(Long patientId);
+
+    Set<HealthInsuranceDtoResponse> findAllUnpaidByPatient(Long patientId);
 }

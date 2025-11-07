@@ -18,22 +18,11 @@ public class DiagnosisDtoResponse {
 
     private Long id;
 
+    private String diagnosis;
+
+    private Long patientId;
+
+    private Long doctorId;
+
     private String doctorName;
-
-    private String patientName;
-
-    private String complaints;
-
-    private String medicalHistory;
-
-    private List<String> allergies;
-
-    private String diagnosisResult;
-
-    private MedicationDtoResponse medication;
-
-    private String requiredTests;
-
-    private LocalDateTime createdAt;
-
 }

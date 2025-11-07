@@ -12,6 +12,8 @@ public interface VisitRepository extends JpaRepository<Visit, Long> {
 
     boolean existsByAppointment_Id(Long appointmentId);
 
+    boolean existsByDiagnosis_Id(Long diagnosisId);
+
     // doctor’s visits (by appointment.doctor)
     List<Visit> findByAppointment_Doctor_IdOrderByAppointment_DateDesc(Long doctorId);
 

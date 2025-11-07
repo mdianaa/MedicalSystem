@@ -2,6 +2,7 @@ package org.nbu.medicalrecord.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,32 +19,13 @@ import java.util.Set;
 public class Diagnosis extends BaseEntity {
 
     @Column()
-    @NotBlank
+    @NotNull
     @Lob
-    private String complaints;
+    private String diagnosis;
 
-    @Column(name = "medical_history")
-    @Lob
-    private String medicalHistory;  // patient's past conditions relevant to the current diagnosis
-
-    @ManyToMany(cascade = CascadeType.PERSIST)
-    private Set<Allergy> allergies;  // patient might not have any allergies
-
-    @Column(name = "diagnosis_result")
-    @NotBlank
-    @Lob
-    private String diagnosisResult;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    private Medication medication;   // no medications might be prescribed
-
-    @Column(name = "required_tests")
-    @Lob
-    private String requiredTests;   // lab tests if needed
-
-    @ManyToOne()
-    private Doctor doctor;
-
-    @ManyToOne
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Patient patient;
+
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private Doctor doctor;
 }

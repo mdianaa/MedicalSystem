@@ -5,9 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -16,24 +13,22 @@ public class VisitDtoResponse {
 
     private Long id;
 
-    private Long appointmentId;
-
-    private Long doctorId;
-
     private String doctorName;
 
-    private Long patientId;
-
-    private String patientName;
+    private Long appointmentId;
 
     private Long medicalRecordId;
 
-    private LocalDate date;
+    private Long sickLeaveId;
 
-    private LocalTime hour;
+    private Long medicationId;
 
     private Long diagnosisId;
 
-    private Long sickLeaveId;
+    private String complaints;
+
+    private String medicalHistory;
+
+    private String requiredTests;
 
 }

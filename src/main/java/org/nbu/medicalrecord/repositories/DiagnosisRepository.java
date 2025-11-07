@@ -20,9 +20,9 @@ public interface DiagnosisRepository extends JpaRepository<Diagnosis, Long> {
     }
 
     @Query("""
-     select d.diagnosisResult as diagnosisResult, count(d) as cnt
+     select d.diagnosis as diagnosis, count(d) as cnt
      from Diagnosis d
-     group by d.diagnosisResult
+     group by d.diagnosis
      order by count(d) desc
   """)
     List<DiagnosisResultCount> countByDiagnosisResultDesc();

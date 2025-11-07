@@ -2,6 +2,7 @@ package org.nbu.medicalrecord.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -9,6 +10,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,4 +26,7 @@ public class Specialization extends BaseEntity {
     @NotBlank
     @Length(max = 30)
     private String type;
+
+    @ManyToMany(mappedBy = "specializations")
+    private Set<Doctor> doctors = new HashSet<>();
 }

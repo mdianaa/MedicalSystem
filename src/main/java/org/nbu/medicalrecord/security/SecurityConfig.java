@@ -29,7 +29,7 @@ public class SecurityConfig {
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/home", "/auth","/auth/login", "/auth/accept-invite", "/actuator/health").permitAll()
-                        .requestMatchers("/patient/**").hasAuthority("PATIENT")
+                        .requestMatchers("/patient/**").hasAnyAuthority("PATIENT", "DOCTOR", "ADMIN")
                         .requestMatchers("/doctor/**").hasAnyAuthority("DOCTOR", "ADMIN")
                         .requestMatchers("/admin/**").hasAuthority("ADMIN")
                         .anyRequest().authenticated()

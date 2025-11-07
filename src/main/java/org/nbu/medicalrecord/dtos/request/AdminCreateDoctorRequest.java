@@ -4,6 +4,8 @@ import jakarta.validation.constraints.*;
 import lombok.Data;
 import org.nbu.medicalrecord.entities.Specialization;
 
+import java.util.Set;
+
 @Data
 public class AdminCreateDoctorRequest {
 
@@ -25,7 +27,7 @@ public class AdminCreateDoctorRequest {
     private String lastName;
 
     @NotNull
-    private Long specializationId;
+    private Set<Long> specializationIds;
 
     @Size(min=8, max=100)
     @NotBlank

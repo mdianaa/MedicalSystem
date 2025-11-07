@@ -26,15 +26,16 @@ public class MedicineController {
         return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }
 
-    @GetMapping
+    @GetMapping("/all")
     @PreAuthorize("hasAnyAuthority('DOCTOR','ADMIN')")
     public Set<MedicineDtoResponse> list() {
         return medicineService.showAllMedicines();
     }
 
-    @GetMapping("/search")
+    // TODO
+    @GetMapping("/name/mg")
     @PreAuthorize("hasAnyAuthority('DOCTOR','ADMIN')")
-    public MedicineDtoResponse get(@RequestParam String name, @RequestParam int mg) {
+    public MedicineDtoResponse show(@RequestParam String name, @RequestParam int mg) {
         return medicineService.showMedicine(name, mg);
     }
 

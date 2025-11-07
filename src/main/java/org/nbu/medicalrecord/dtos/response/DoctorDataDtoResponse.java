@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Set;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -17,7 +19,7 @@ public class DoctorDataDtoResponse {
 
     private String lastName;
 
-    private SpecializationDtoResponse specialization;
+    private Set<SpecializationDtoResponse> specializations;
 
     private boolean gp;
 

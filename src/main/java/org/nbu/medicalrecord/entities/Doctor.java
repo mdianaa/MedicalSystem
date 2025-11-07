@@ -1,16 +1,12 @@
 package org.nbu.medicalrecord.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.validator.constraints.Length;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -25,8 +21,16 @@ public class Doctor extends BaseEntity {
     @JoinColumn(name = "user_id", unique = true)
     private User user;
 
-    @ManyToOne
-    private Specialization specialization;
+    @ManyToMany
+    @JoinTable(
+            name = "doctor_specializations",
+            joinColumns = @JoinColumn(name = "doctor_id"),
+            inverseJoinColumns = @JoinColumn(name = "specialization_id"),
+            uniqueConstraints = {
+                    @UniqueConstraint(columnNames = {"doctor_id", "specialization_id"})
+            }
+    )
+    private Set<Specialization> specializations = new HashSet<>();
 
     @Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
     private boolean gp;

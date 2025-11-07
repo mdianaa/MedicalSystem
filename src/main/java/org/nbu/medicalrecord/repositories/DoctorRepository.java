@@ -1,27 +1,32 @@
 package org.nbu.medicalrecord.repositories;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import org.nbu.medicalrecord.entities.Doctor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface DoctorRepository extends JpaRepository<Doctor, Long> {
 
     boolean existsByUser_Egn(String egn);
 
-    boolean existsBySpecialization_Id(Long specializationId);
+    boolean existsBySpecializations_Id(Long specializationId);
 
     List<Doctor> findByGpTrue();
 
-    Doctor findByUser_Email(String email);
+    Optional<Doctor> findByUser_Email(String email);
 
-    List<Doctor> findBySpecialization_TypeIgnoreCase(String type);
+    @Query("""
+           select distinct d
+           from Doctor d
+           join d.specializations s
+           where lower(s.type) = lower(:type)
+           """)
+    List<Doctor> findBySpecializationType(@Param("type") String type);
 
     interface DoctorSickLeaveCount {
         Long getDoctorId();

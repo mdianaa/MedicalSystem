@@ -1,4 +1,4 @@
-package org.nbu.medicalrecord.config;
+package org.nbu.medicalrecord.util;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.nbu.medicalrecord.dtos.response.DoctorDataPatientViewDtoResponse;
 import org.nbu.medicalrecord.dtos.response.PatientDataDtoResponse;
 import org.nbu.medicalrecord.dtos.response.PatientDataWithDoctorDtoResponse;
+import org.nbu.medicalrecord.dtos.response.SpecializationDtoResponse;
 import org.nbu.medicalrecord.entities.Doctor;
 import org.nbu.medicalrecord.entities.Patient;
 import org.nbu.medicalrecord.repositories.DoctorRepository;
@@ -17,6 +18,8 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static org.nbu.medicalrecord.util.CheckExistUtil.*;
+
 @Service
 @RequiredArgsConstructor
 public class PatientServiceImpl implements PatientService {
@@ -27,9 +30,7 @@ public class PatientServiceImpl implements PatientService {
     @Override
     @Transactional
     public Set<PatientDataWithDoctorDtoResponse> showAllPatientsWithGP(long doctorId) {
-        if (doctorRepository.findById(doctorId).isEmpty()) {
-            throw new IllegalArgumentException("Doctor with id " + doctorId + " not found");
-        }
+        checkIfDoctorExists(doctorRepository, doctorId);
 
         return patientRepository.findByGp_Id(doctorId).stream()
                 .sorted(byNameThenId())
@@ -49,9 +50,7 @@ public class PatientServiceImpl implements PatientService {
     @Override
     @Transactional
     public Set<PatientDataWithDoctorDtoResponse> showAllPatientsWhoVisitedDoctor(long doctorId) {
-        if (doctorRepository.findById(doctorId).isEmpty()) {
-            throw new IllegalArgumentException("Doctor with id " + doctorId + " not found");
-        }
+        checkIfDoctorExists(doctorRepository, doctorId);
 
         return patientRepository.findDistinctByVisitedDoctor(doctorId).stream()
                 .sorted(byNameThenId())
@@ -62,17 +61,17 @@ public class PatientServiceImpl implements PatientService {
     @Override
     @Transactional
     public int totalCountPatientsWhoVisitedDoctor(long doctorId) {
-        if (doctorRepository.findById(doctorId).isEmpty()) {
-            throw new IllegalArgumentException("Doctor with id " + doctorId + " not found");
-        }
+        checkIfPatientExists(patientRepository, doctorId);
 
         return patientRepository.countDistinctByVisitedDoctor(doctorId);
     }
 
     @Override
     @Transactional
-    public Set<PatientDataWithDoctorDtoResponse> showAllPatientsWithResultDiagnosis(String result) {
-        return patientRepository.findDistinctByDiagnosisResult(result).stream()
+    public Set<PatientDataWithDoctorDtoResponse> showAllPatientsWithSameDiagnosis(String diagnosis) {
+        // TODO check if diagnosis exists
+
+        return patientRepository.findDistinctByDiagnosis(diagnosis).stream()
                 .sorted(byNameThenId())
                 .map(this::toPatientWithDoctorDto)
                 .collect(Collectors.toCollection(LinkedHashSet::new));
@@ -80,8 +79,10 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     @Transactional
-    public int totalCountPatientsWithResultDiagnosis(String result) {
-        return patientRepository.countDistinctByDiagnosisResult(result);
+    public int totalCountPatientsWithSameDiagnosis(String diagnosis) {
+        // TODO check if diagnosis exists
+
+        return patientRepository.countDistinctByDiagnosis(diagnosis);
     }
 
     @Override
@@ -117,12 +118,18 @@ public class PatientServiceImpl implements PatientService {
         Doctor d = p.getGp();
         DoctorDataPatientViewDtoResponse doctor = null;
         if (d != null) {
-            String specName = d.getSpecialization() != null ? d.getSpecialization().getType() : null;
+            Set<SpecializationDtoResponse> specDtos =
+                    (d.getSpecializations() == null)
+                            ? Set.of()
+                            : d.getSpecializations().stream()
+                            .map(s -> new SpecializationDtoResponse(s.getId(), s.getType()))
+                            .collect(Collectors.toSet());
+
             doctor = new DoctorDataPatientViewDtoResponse(
                     d.getId(),
                     d.getUser() != null ? d.getUser().getFirstName() : null,
                     d.getUser() != null ? d.getUser().getLastName() : null,
-                    specName,
+                    specDtos,
                     d.isGp()
             );
         }

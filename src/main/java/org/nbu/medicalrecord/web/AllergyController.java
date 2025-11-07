@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Set;
+
 @RestController
 @RequestMapping("/allergy")
 @RequiredArgsConstructor
@@ -17,7 +19,7 @@ public class AllergyController {
 
     private final AllergyService allergyService;
 
-    // Only ADMIN can manage vocabulary by default
+    // Only admin can manage vocabulary by default
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<AllergyDtoResponse> add(@Valid @RequestBody AllergyDtoRequest req) {
@@ -25,11 +27,17 @@ public class AllergyController {
         return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }
 
-    // Doctors/Admins can read details
+    // Doctors/admins can read details
     @GetMapping("/{allergen}")
     @PreAuthorize("hasAnyAuthority('DOCTOR','ADMIN')")
     public AllergyDtoResponse show(@PathVariable String allergen) {
         return allergyService.showAllergy(allergen);
+    }
+
+    @GetMapping("/all")
+    @PreAuthorize("hasAnyAuthority('DOCTOR','ADMIN')")
+    public Set<AllergyDtoResponse> list() {
+        return allergyService.listAllergies();
     }
 
     // Only ADMIN can delete by default

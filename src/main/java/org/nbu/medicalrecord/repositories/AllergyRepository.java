@@ -15,7 +15,4 @@ public interface AllergyRepository extends JpaRepository<Allergy, Long> {
     Optional<Allergy> findByAllergenIgnoreCase(String allergen);
 
     long deleteByAllergenIgnoreCase(String allergen);
-
-    @EntityGraph(attributePaths = {"diagnoses"})
-    Optional<Allergy> findWithDiagnosesByAllergenIgnoreCase(String allergen);
 }

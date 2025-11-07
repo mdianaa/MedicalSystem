@@ -18,16 +18,16 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class MedicalRecordServiceImpl implements MedicalRecordService {
 
-    private final MedicalRecordRepository recordRepo;
-    private final PatientRepository patientRepo;
+    private final MedicalRecordRepository medicalRecordRepository;
+    private final PatientRepository patientRepository;
 
     @Override
     @Transactional
     public MedicalRecordDtoResponse createNewMedicalRecord(MedicalRecordDtoRequest req) {
-        Patient patient = patientRepo.findById(req.getPatientId())
+        Patient patient = patientRepository.findById(req.getPatientId())
                 .orElseThrow(() -> new IllegalArgumentException("Patient with id " + req.getPatientId() + " not found"));
 
-        if (recordRepo.existsByPatient_Id(patient.getId())) {
+        if (medicalRecordRepository.existsByPatient_Id(patient.getId())) {
             throw new IllegalStateException("Medical record already exists for this patient.");
         }
 
@@ -35,14 +35,14 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
         rec.setPatient(patient);
         rec.setVisits(new HashSet<>());
 
-        recordRepo.save(rec);
+        medicalRecordRepository.save(rec);
         return toDto(rec);
     }
 
     @Override
     @Transactional
     public MedicalRecordDtoResponse showMedicalRecord(long patientId) {
-        MedicalRecord rec = recordRepo.findByPatient_Id(patientId)
+        MedicalRecord rec = medicalRecordRepository.findByPatient_Id(patientId)
                 .orElseThrow(() -> new IllegalArgumentException("Medical record for patient with id " + patientId + " not found"));
         return toDto(rec);
     }
@@ -50,7 +50,7 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
     @Override
     @Transactional
     public Set<MedicalRecordDtoResponse> showAllMedicalRecords() {
-        return recordRepo.findAll().stream()
+        return medicalRecordRepository.findAll().stream()
                 .map(this::toDto)
                 .collect(java.util.stream.Collectors.toCollection(java.util.LinkedHashSet::new));
     }
@@ -58,10 +58,10 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
     @Override
     @Transactional
     public void deleteMedicalRecord(long medicalRecordId) {
-        if (!recordRepo.existsById(medicalRecordId)) {
+        if (!medicalRecordRepository.existsById(medicalRecordId)) {
             throw new IllegalArgumentException("Medical record with id " + medicalRecordId + " not found");
         }
-        recordRepo.deleteById(medicalRecordId);
+        medicalRecordRepository.deleteById(medicalRecordId);
     }
 
     private MedicalRecordDtoResponse toDto(MedicalRecord rec) {

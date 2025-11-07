@@ -7,14 +7,15 @@ import org.nbu.medicalrecord.dtos.response.MedicationDtoResponse;
 import org.nbu.medicalrecord.dtos.response.MedicineDtoResponse;
 import org.nbu.medicalrecord.entities.Medication;
 import org.nbu.medicalrecord.entities.Medicine;
-import org.nbu.medicalrecord.repositories.DiagnosisRepository;
-import org.nbu.medicalrecord.repositories.MedicationRepository;
-import org.nbu.medicalrecord.repositories.MedicineRepository;
+import org.nbu.medicalrecord.entities.Visit;
+import org.nbu.medicalrecord.repositories.*;
 import org.nbu.medicalrecord.services.MedicationService;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static org.nbu.medicalrecord.util.CheckExistUtil.*;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +23,8 @@ public class MedicationServiceImpl implements MedicationService {
 
     private final MedicationRepository medicationRepository;
     private final MedicineRepository medicineRepository;
-    private final DiagnosisRepository diagnosisRepository;
+    private final DoctorRepository doctorRepository;
+    private final VisitRepository visitRepository;
 
     @Override
     @Transactional
@@ -44,12 +46,23 @@ public class MedicationServiceImpl implements MedicationService {
     }
 
     @Override
+    @Transactional
     public Set<MedicationDtoResponse> showAllMedicationsByDoctor(long doctorId) {
-        return diagnosisRepository.findByDoctor_Id(doctorId).stream()
-                .map(d -> d.getMedication())
+        checkIfDoctorExists(doctorRepository, doctorId);
+
+        return visitRepository.findByAppointment_Doctor_IdOrderByAppointment_DateDesc(doctorId).stream()
+                .map(Visit::getMedication)
                 .filter(Objects::nonNull)
+                .filter(m -> m.getId() != null)
+                .collect(java.util.stream.Collectors.toMap(
+                        Medication::getId,
+                        m -> m,
+                        (existing, ignored) -> existing,
+                        java.util.LinkedHashMap::new
+                ))
+                .values().stream()
                 .map(this::toDto)
-                .collect(Collectors.toCollection(LinkedHashSet::new));
+                .collect(java.util.stream.Collectors.toCollection(java.util.LinkedHashSet::new));
     }
 
     private MedicationDtoResponse toDto(Medication medication) {

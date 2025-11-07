@@ -43,20 +43,20 @@ public class PatientController {
         return "Total count of patients visited doctor with id " + doctorId + " : " + patientService.totalCountPatientsWhoVisitedDoctor(doctorId);
     }
 
-    // Patients filtered by a diagnosis result
+    // Show all patients with the same diagnosis
     // TODO
-    @GetMapping("/by-diagnosis-result")
+    @GetMapping("/by-diagnosis")
     @PreAuthorize("hasAnyAuthority('DOCTOR','ADMIN')")
-    public Set<PatientDataWithDoctorDtoResponse> byDiagnosisResult(@RequestParam String result) {
-        return patientService.showAllPatientsWithResultDiagnosis(result);
+    public Set<PatientDataWithDoctorDtoResponse> byDiagnosisResult(@RequestParam String diagnosis) {
+        return patientService.showAllPatientsWithSameDiagnosis(diagnosis);
     }
 
     // Get count of all patients with the same diagnosis
     // TODO
-    @GetMapping("/by-diagnosis-result/count")
+    @GetMapping("/by-diagnosis/count")
     @PreAuthorize("hasAnyAuthority('DOCTOR','ADMIN')")
-    public int byDiagnosisResultCount(@RequestParam String result) {
-        return patientService.totalCountPatientsWithResultDiagnosis(result);
+    public int byDiagnosisResultCount(@RequestParam String diagnosis) {
+        return patientService.totalCountPatientsWithSameDiagnosis(diagnosis);
     }
 
     // Patients with the same allergen

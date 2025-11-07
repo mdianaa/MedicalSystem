@@ -20,13 +20,15 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static org.nbu.medicalrecord.util.CheckExistUtil.*;
+
 @Service
 @RequiredArgsConstructor
 public class SickLeaveServiceImpl implements SickLeaveService {
 
-    private final SickLeaveRepository sickLeaveRepo;
-    private final DoctorRepository doctorRepo;
-    private final PatientRepository patientRepo;
+    private final SickLeaveRepository sickLeaveRepository;
+    private final DoctorRepository doctorRepository;
+    private final PatientRepository patientRepository;
 
     @Override
     @Transactional
@@ -38,9 +40,9 @@ public class SickLeaveServiceImpl implements SickLeaveService {
             throw new IllegalArgumentException("Sick leave is too far in the past.");
         }
 
-        Doctor doctor = doctorRepo.findById(req.getDoctorId())
+        Doctor doctor = doctorRepository.findById(req.getDoctorId())
                 .orElseThrow(() -> new IllegalArgumentException("Doctor with id " + req.getDoctorId() + " not found"));
-        Patient patient = patientRepo.findById(req.getPatientId())
+        Patient patient = patientRepository.findById(req.getPatientId())
                 .orElseThrow(() -> new IllegalArgumentException("Patient with id " + req.getPatientId() + " not found"));
 
         SickLeave sl = new SickLeave();
@@ -50,27 +52,33 @@ public class SickLeaveServiceImpl implements SickLeaveService {
         sl.setToDate(req.getToDate());
         sl.setReason(req.getReason());
 
-        sickLeaveRepo.save(sl);
+        sickLeaveRepository.save(sl);
         return toDto(sl);
     }
 
     @Override
+    @Transactional
     public Set<SickLeaveDtoResponse> showAllSickLeavesByDoctor(long doctorId) {
-        return sickLeaveRepo.findByDoctor_IdOrderByFromDateDesc(doctorId).stream()
+        checkIfDoctorExists(doctorRepository, doctorId);
+
+        return sickLeaveRepository.findByDoctor_IdOrderByFromDateDesc(doctorId).stream()
                 .map(this::toDto)
                 .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     @Override
+    @Transactional
     public Set<SickLeaveDtoResponse> showAllSickLeavesForPatient(long patientId) {
-        return sickLeaveRepo.findByPatient_IdOrderByFromDateDesc(patientId).stream()
+        checkIfPatientExists(patientRepository, patientId);
+
+        return sickLeaveRepository.findByPatient_IdOrderByFromDateDesc(patientId).stream()
                 .map(this::toDto)
                 .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     @Override
     public Month showMonthWithMostSickLeaves() {
-        var list = sickLeaveRepo.countByMonthDesc();
+        var list = sickLeaveRepository.countByMonthDesc();
         if (list.isEmpty()) return null;
         int monthNumber = list.getFirst().getM();
         return Month.of(monthNumber);

@@ -14,9 +14,9 @@ public interface PatientService {
 
     int totalCountPatientsWhoVisitedDoctor(long doctorId);
 
-    Set<PatientDataWithDoctorDtoResponse> showAllPatientsWithResultDiagnosis(String result);
+    Set<PatientDataWithDoctorDtoResponse> showAllPatientsWithSameDiagnosis(String diagnosis);
 
-    int totalCountPatientsWithResultDiagnosis(String result);
+    int totalCountPatientsWithSameDiagnosis(String diagnosis);
 
     Set<PatientDataWithDoctorDtoResponse> showAllPatientsWithAllergy(String allergen);
 }

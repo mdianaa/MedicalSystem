@@ -8,7 +8,6 @@ import org.nbu.medicalrecord.entities.Specialization;
 import org.nbu.medicalrecord.repositories.DoctorRepository;
 import org.nbu.medicalrecord.repositories.SpecializationRepository;
 import org.nbu.medicalrecord.services.SpecializationService;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashSet;
@@ -19,28 +18,28 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SpecializationServiceImpl implements SpecializationService {
 
-    private final SpecializationRepository repo;
-    private final DoctorRepository doctorRepo;
+    private final SpecializationRepository specializationRepository;
+    private final DoctorRepository doctorRepository;
 
     @Override
     @Transactional
     public SpecializationDtoResponse addNewSpecialization(SpecializationDtoRequest req) {
         String name = normalize(req.getType());
-        if (repo.existsByTypeIgnoreCase(name)) {
+        if (specializationRepository.existsByTypeIgnoreCase(name)) {
             throw new IllegalStateException("Specialization " + name + " already exists");
         }
 
         Specialization s = new Specialization();
         s.setType(name);
 
-        repo.save(s);
+        specializationRepository.save(s);
 
         return toDto(s);
     }
 
     @Override
     public Set<SpecializationDtoResponse> showAllSpecializations() {
-        return repo.findAllByOrderByTypeAsc().stream()
+        return specializationRepository.findAllByOrderByTypeAsc().stream()
                 .map(this::toDto)
                 .collect(Collectors.toCollection(LinkedHashSet::new));
     }
@@ -48,15 +47,15 @@ public class SpecializationServiceImpl implements SpecializationService {
     @Override
     @Transactional
     public void deleteSpecialization(long specializationId) {
-        if (!repo.existsById(specializationId)) {
+        if (!specializationRepository.existsById(specializationId)) {
             throw new IllegalArgumentException("Specialization not found");
         }
 
-        if (doctorRepo.existsBySpecialization_Id(specializationId)) {
+        if (doctorRepository.existsBySpecializations_Id(specializationId)) {
             throw new IllegalStateException("Cannot delete specialization: it is used by at least one doctor.");
         }
 
-        repo.deleteById(specializationId);
+        specializationRepository.deleteById(specializationId);
     }
 
     private SpecializationDtoResponse toDto(Specialization s) {

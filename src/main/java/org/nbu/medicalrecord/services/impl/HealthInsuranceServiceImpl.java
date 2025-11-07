@@ -17,20 +17,22 @@ import java.time.Month;
 import java.util.List;
 import java.util.Set;
 
+import static org.nbu.medicalrecord.util.CheckExistUtil.*;
+
 @Service
 @RequiredArgsConstructor
 public class HealthInsuranceServiceImpl implements HealthInsuranceService {
 
-    private final HealthInsuranceRepository repo;
-    private final PatientRepository patientRepo;
+    private final HealthInsuranceRepository healthInsuranceRepository;
+    private final PatientRepository patientRepository;
 
     @Override
     @Transactional
     public HealthInsuranceDtoResponse createNewHealthInsurance(HealthInsuranceDtoRequest req) {
-        Patient patient = patientRepo.findById(req.getPatientId())
+        Patient patient = patientRepository.findById(req.getPatientId())
                 .orElseThrow(() -> new IllegalArgumentException("Patient with id " + req.getPatientId() + " not found"));
 
-        boolean exists = repo.existsByPatient_IdAndMonthAndYear(
+        boolean exists = healthInsuranceRepository.existsByPatient_IdAndMonthAndYear(
                 patient.getId(),
                 req.getMonth(),
                 req.getYear()
@@ -46,7 +48,7 @@ public class HealthInsuranceServiceImpl implements HealthInsuranceService {
         // unpaid at creation time
         hi.setPaid(false);
 
-        repo.save(hi);
+        healthInsuranceRepository.save(hi);
         return toDto(hi);
     }
 
@@ -65,11 +67,11 @@ public class HealthInsuranceServiceImpl implements HealthInsuranceService {
         int year = now.getYear();
 
         // get all patients
-        List<Patient> patients = patientRepo.findAll();
+        List<Patient> patients = patientRepository.findAll();
 
         // for each patient, ensure the row for (month, year) exists
         for (Patient p : patients) {
-            boolean exists = repo.existsByPatient_IdAndMonthAndYear(
+            boolean exists = healthInsuranceRepository.existsByPatient_IdAndMonthAndYear(
                     p.getId(),
                     month,
                     year
@@ -82,7 +84,7 @@ public class HealthInsuranceServiceImpl implements HealthInsuranceService {
                 hi.setYear(year);
                 hi.setPaid(false);
 
-                repo.save(hi);
+                healthInsuranceRepository.save(hi);
             }
         }
     }
@@ -90,7 +92,9 @@ public class HealthInsuranceServiceImpl implements HealthInsuranceService {
     @Override
     @Transactional
     public void payHealthInsuranceForMonthInYear(long patientId, Month month, int year) {
-        HealthInsurance hi = repo.findByPatient_IdAndMonthAndYear(patientId, month, year)
+        checkIfPatientExists(patientRepository, patientId);
+
+        HealthInsurance hi = healthInsuranceRepository.findByPatient_IdAndMonthAndYear(patientId, month, year)
                 .orElseThrow(() -> new IllegalArgumentException("Health insurance entry not found"));
 
         if (hi.isPaid()) {
@@ -98,14 +102,16 @@ public class HealthInsuranceServiceImpl implements HealthInsuranceService {
         }
 
         hi.setPaid(true);
-        repo.save(hi);
+        healthInsuranceRepository.save(hi);
     }
 
     @Override
     @Transactional
     public void payHealthInsuranceForMonthsInYear(long patientId, Set<Month> months, int year) {
+        checkIfPatientExists(patientRepository, patientId);
+
         for (Month m : months) {
-            HealthInsurance hi = repo.findByPatient_IdAndMonthAndYear(patientId, m, year)
+            HealthInsurance hi = healthInsuranceRepository.findByPatient_IdAndMonthAndYear(patientId, m, year)
                     .orElseThrow(() -> new IllegalArgumentException(
                             "Entry not found for " + m + " " + year));
 
@@ -114,17 +120,16 @@ public class HealthInsuranceServiceImpl implements HealthInsuranceService {
             }
 
             hi.setPaid(true);
-            repo.save(hi);
+            healthInsuranceRepository.save(hi);
         }
     }
 
     @Override
     @Transactional
     public Set<HealthInsuranceDtoResponse> findAllByPatient(Long patientId) {
-        if (patientRepo.findById(patientId).isEmpty()) {
-            throw new IllegalArgumentException("Patient with id " + patientId + " not found");
-        }
-        return repo.findAllByPatientOrderByYearCalendarMonthDesc(patientId).stream()
+        checkIfPatientExists(patientRepository, patientId);
+
+        return healthInsuranceRepository.findAllByPatientOrderByYearCalendarMonthDesc(patientId).stream()
                 .map(this::toDto)
                 .collect(java.util.stream.Collectors.toCollection(java.util.LinkedHashSet::new));
     }
@@ -132,10 +137,9 @@ public class HealthInsuranceServiceImpl implements HealthInsuranceService {
     @Override
     @Transactional
     public Set<HealthInsuranceDtoResponse> findAllPaidByPatient(Long patientId) {
-        if (patientRepo.findById(patientId).isEmpty()) {
-            throw new IllegalArgumentException("Patient with id " + patientId + " not found");
-        }
-        return repo.findPaidByPatientOrderByYearMonthDesc(patientId).stream()
+        checkIfPatientExists(patientRepository, patientId);
+
+        return healthInsuranceRepository.findPaidByPatientOrderByYearMonthDesc(patientId).stream()
                 .map(this::toDto)
                 .collect(java.util.stream.Collectors.toCollection(java.util.LinkedHashSet::new));
     }
@@ -143,17 +147,18 @@ public class HealthInsuranceServiceImpl implements HealthInsuranceService {
     @Override
     @Transactional
     public Set<HealthInsuranceDtoResponse> findAllUnpaidByPatient(Long patientId) {
-        if (patientRepo.findById(patientId).isEmpty()) {
-            throw new IllegalArgumentException("Patient with id " + patientId + " not found");
-        }
-        return repo.findUnpaidByPatientOrderByYearMonthDesc(patientId).stream()
+        checkIfPatientExists(patientRepository, patientId);
+
+        return healthInsuranceRepository.findUnpaidByPatientOrderByYearMonthDesc(patientId).stream()
                 .map(this::toDto)
                 .collect(java.util.stream.Collectors.toCollection(java.util.LinkedHashSet::new));
     }
 
     @Override
     public Set<HealthInsuranceDtoResponse> referenceForLastSixMonthsByPatientId(Long patientId) {
-        return repo.findAllByPatientOrderByYearMonthDesc(patientId).stream()
+        checkIfPatientExists(patientRepository, patientId);
+
+        return healthInsuranceRepository.findAllByPatientOrderByYearMonthDesc(patientId).stream()
                 .limit(6)
                 .map(this::toDto)
                 .collect(java.util.stream.Collectors.toCollection(java.util.LinkedHashSet::new));

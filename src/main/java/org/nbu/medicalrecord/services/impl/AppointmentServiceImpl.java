@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static org.nbu.medicalrecord.util.CheckExistUtil.*;
+
 @Service
 @RequiredArgsConstructor
 public class AppointmentServiceImpl implements AppointmentService {
@@ -65,6 +67,8 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     @Transactional
     public Set<PatientAppointmentDtoResponse> showAllAvailableAppointmentsByDoctorId(Long doctorId) {
+        checkIfDoctorExists(doctorRepository, doctorId);
+
         return appointmentRepository
                 .findByDoctor_IdAndPatientIsNullAndDateGreaterThanEqual(doctorId, LocalDate.now())
                 .stream()
@@ -77,9 +81,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     @Transactional
     public Set<PatientAppointmentDtoResponse> showAllPatientAppointmentsById(Long patientId) {
-        if (patientRepository.findById(patientId).isEmpty()) {
-            throw new IllegalArgumentException("Patient with id " + patientId + " not found");
-        }
+        checkIfPatientExists(patientRepository, patientId);
 
         return appointmentRepository.findByPatient_Id(patientId).stream()
                 .sorted(Comparator.comparing(Appointment::getDate)
@@ -91,9 +93,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     @Transactional
     public Set<PatientAppointmentDtoResponse> showPatientAppointmentOnDateById(Long patientId, LocalDate date) {
-        if (patientRepository.findById(patientId).isEmpty()) {
-            throw new IllegalArgumentException("Patient with id " + patientId + " not found");
-        }
+        checkIfPatientExists(patientRepository, patientId);
 
         List<Appointment> appts = appointmentRepository.findByPatient_IdAndDate(patientId, date);
         if (appts.isEmpty()) {
@@ -110,9 +110,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     @Transactional
     public Set<DoctorAppointmentDtoResponse> showAllOccupiedAppointmentsById(Long doctorId) {
-        if (doctorRepository.findById(doctorId).isEmpty()) {
-            throw new IllegalArgumentException("Doctor with id " + doctorId + " not found");
-        }
+        checkIfDoctorExists(doctorRepository, doctorId);
 
         return appointmentRepository.findByDoctor_IdAndPatientIsNotNull(doctorId).stream()
                 .sorted(Comparator.comparing(Appointment::getDate)
@@ -124,6 +122,11 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     @Transactional
     public void cancelAppointment(long appointmentId) {
+        if (appointmentRepository.findById(appointmentId).isEmpty()) {
+            throw new IllegalArgumentException("Appointment wih id " + appointmentId + " not found");
+        }
+
+        // TODO: check whether it is connected with something else
         appointmentRepository.deleteById(appointmentId);
     }
 

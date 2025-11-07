@@ -20,7 +20,7 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
     // Patients registered with a specific GP
     List<Patient> findByGp_Id(Long doctorId);
 
-    Patient findByUser_Email(String email);
+    Optional<Patient> findByUser_Email(String email);
 
     int countByGp_Id(Long doctorId);
 
@@ -45,14 +45,14 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
       from Diagnosis d
       where d.diagnosis = :result
     """)
-    List<Patient> findDistinctByDiagnosisResult(String result);
+    List<Patient> findDistinctByDiagnosis(String diagnosis);
 
     @Query("""
       select count(distinct d.patient.id)
       from Diagnosis d
       where d.diagnosis = :result
     """)
-    int countDistinctByDiagnosisResult(String result);
+    int countDistinctByDiagnosis(String diagnosis);
 
     // Patients with at least one allergy (by allergen name)
     @Query("""

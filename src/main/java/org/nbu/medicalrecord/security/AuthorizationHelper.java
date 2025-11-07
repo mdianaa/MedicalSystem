@@ -22,7 +22,9 @@ public class AuthorizationHelper {
         String email = principalEmail(authentication);
         if (!StringUtils.hasText(email) || doctorId == null) return false;
 
-        Doctor doctor = doctorRepository.findByUser_Email(email);
+        Doctor doctor = doctorRepository.findByUser_Email(email).isPresent()
+                ? doctorRepository.findByUser_Email(email).get() : null;
+
         return doctor != null && doctorId.equals(doctor.getId());
     }
 
@@ -30,7 +32,9 @@ public class AuthorizationHelper {
         String email = principalEmail(authentication);
         if (!StringUtils.hasText(email) || patientId == null) return false;
 
-        Patient patient = patientRepository.findByUser_Email(email);
+        Patient patient = patientRepository.findByUser_Email(email).isPresent()
+                ? patientRepository.findByUser_Email(email).get() : null;
+
         return patient != null && patientId.equals(patient.getId());
     }
 
@@ -39,7 +43,9 @@ public class AuthorizationHelper {
         String email = principalEmail(authentication);
         if (!StringUtils.hasText(email) || patientId == null) return false;
 
-        Doctor doctor = doctorRepository.findByUser_Email(email);
+        Doctor doctor = doctorRepository.findByUser_Email(email).isPresent()
+                ? doctorRepository.findByUser_Email(email).get() : null;
+
         if (doctor == null) return false;
 
         return patientRepository.existsByIdAndGp_Id(patientId, doctor.getId());
@@ -50,7 +56,9 @@ public class AuthorizationHelper {
         String email = principalEmail(authentication);
         if (!StringUtils.hasText(email) || appointmentId == null) return false;
 
-        Doctor doctor = doctorRepository.findByUser_Email(email);
+        Doctor doctor = doctorRepository.findByUser_Email(email).isPresent()
+                ? doctorRepository.findByUser_Email(email).get() : null;
+
         if (doctor == null) return false;
         return appointmentRepository.existsByIdAndDoctor_Id(appointmentId, doctor.getId());
     }
